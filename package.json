@@ -1,0 +1,19 @@
+{
+  "name": "baltimorecountymd.gov-selenium-tests",
+  "version": "1.0.0",
+  "description": "Automated UI testing for BaltimoreCountyMD.gov features",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baltimorecounty/baltimorecountymd.gov-selenium-tests.git"
+  },
+  "author": "Michael Snyder",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/baltimorecounty/baltimorecountymd.gov-selenium-tests/issues"
+  },
+  "homepage": "https://github.com/baltimorecounty/baltimorecountymd.gov-selenium-tests#readme"
+}
