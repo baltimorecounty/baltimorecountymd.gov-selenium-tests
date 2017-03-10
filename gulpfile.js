@@ -6,6 +6,6 @@ gulp.task('default', () => {
 	gulp.src('spec/**/*.js')
 		.pipe(jasmine({
 			reporter: new SpecReporter(),
-			timeout: 10000
+			timeout: 30000
 		}));
 });

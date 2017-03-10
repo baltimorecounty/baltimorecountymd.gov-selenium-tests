@@ -20,20 +20,14 @@
   "homepage": "https://github.com/baltimorecounty/baltimorecountymd.gov-selenium-tests#readme",
   "dependencies": {
     "assert": "^1.4.1",
+    "flat": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-jasmine": "^2.4.2",
-    "selenium-webdriver": "^3.3.0",
-    "wdio-jasmine-framework": "^0.2.19",
-    "webdriverio": "^4.6.2"
+    "lodash": "^4.17.4",
+    "selenium-webdriver": "^3.3.0"
   },
   "devDependencies": {
     "gulp-webdriver": "^2.0.3",
-    "jasmine-spec-reporter": "^3.2.0",
-    "karma": "^1.5.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-jasmine": "^1.1.0",
-    "selenium-standalone": "^5.9.1",
-    "wdio-jasmine-framework": "^0.2.19",
-    "wdio-selenium-standalone-service": "^0.0.7"
+    "jasmine-spec-reporter": "^3.2.0"
   }
 }
