@@ -27,6 +27,7 @@
     "selenium-webdriver": "^3.3.0"
   },
   "devDependencies": {
+    "frisby": "git://github.com/vlucas/frisby.git#v2",
     "gulp-webdriver": "^2.0.3",
     "jasmine-spec-reporter": "^3.2.0"
   }
