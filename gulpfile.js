@@ -1,19 +1,28 @@
 const gulp = require('gulp'),
-	jasmine = require('gulp-jasmine'),
-	SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+	mocha = require('gulp-mocha');
 
-gulp.task('default', () => {
+gulp.task('features', () => {
 	gulp.src('spec/features/**/*.js')
-		.pipe(jasmine({
-			reporter: new SpecReporter(),
+		.pipe(mocha({
+			reporter: 'spec',
 			timeout: 30000
 		}));
 });
 
-gulp.task('frisby', () => {
-	gulp.src('spec/services/**/*.js')
-		.pipe(jasmine({
-			reporter: new SpecReporter(),
+gulp.task('features-quick', () => {
+	gulp.src(['spec/features/citysourced/reporter/submit-report-specific-location.spec.js', 'spec/features/citysourced/reporter/verify-fields.spec.js'])
+		.pipe(mocha({
+			reporter: 'spec',
 			timeout: 30000
 		}));
 });
+
+gulp.task('services', () => {
+	gulp.src('spec/services/**/*.js')
+		.pipe(mocha({
+			reporter: 'spec',
+			timeout: 30000
+		}));
+});
+
+gulp.task('default', ['services', 'features'], () => {});

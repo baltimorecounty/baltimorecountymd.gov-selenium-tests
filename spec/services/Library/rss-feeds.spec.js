@@ -1,27 +1,57 @@
-const frisby = require('frisby'),
+const chakram = require('chakram'),
+	expect = chakram.expect,
 	serviceUrl = 'http://localhost:1000/api/libraryfeed';
 
-frisby.create('Get Between The Covers Blog Feed')
-	.get(serviceUrl)
-	.expectStatus(200)
-	.toss();
+describe('Get BCPL Blog RSS Feeds', () => {
 
-frisby.create('Get Adult Fiction Blog Feed')
-	.get(serviceUrl + '/199')
-	.expectStatus(200)
-	.toss();
+  it('should return the "Between The Covers" feed', () => {
+    
+	var response = chakram.get(serviceUrl);
+  
+    expect(response).to.have.status(200);
+    
+    return chakram.wait();
 
-frisby.create('Get Adult Non-Fiction Blog Feed')
-	.get(serviceUrl + '/200')
-	.expectStatus(200)
-	.toss();
+  });
 
-frisby.create('Get Teen Books Blog Feed')
-	.get(serviceUrl + '/188')
-	.expectStatus(200)
-	.toss();
+  it('should return the "Adult Fiction" feed', () => {
+    
+	var response = chakram.get(serviceUrl + '/199');
+  
+    expect(response).to.have.status(200);
+    
+    return chakram.wait();
 
-frisby.create('Get Children\'s Books Blog Feed')
-	.get(serviceUrl + '/191')
-	.expectStatus(200)
-	.toss();
+  });
+
+  it('should return the "Adult Non-Fiction" feed', () => {
+    
+	var response = chakram.get(serviceUrl + '/200');
+  
+    expect(response).to.have.status(200);
+    
+    return chakram.wait();
+
+  });
+
+  it('should return the "Teen Books" feed', () => {
+    
+	var response = chakram.get(serviceUrl + '/188');
+  
+    expect(response).to.have.status(200);
+    
+    return chakram.wait();
+
+  });
+
+  it('should return the "Children\'s Books" feed', () => {
+    
+	var response = chakram.get(serviceUrl + '/191');
+  
+    expect(response).to.have.status(200);
+    
+    return chakram.wait();
+
+  });
+
+}); 	

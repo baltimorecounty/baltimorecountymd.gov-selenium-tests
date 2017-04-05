@@ -1,8 +1,17 @@
-const frisby = require('frisby'),
+const chakram = require('chakram'),
+	expect = chakram.expect,
 	serviceUrl = 'http://localhost:1000/api/docket';
 
-frisby.create('Get Docket Info')
-	.get(serviceUrl)
-	.expectStatus(200)
-	.expectBodyContains('HEADER')
-	.toss();
+describe('Court Docket', () => {
+
+	it('gets the docket information', () => {
+
+		var response = chakram.get(serviceUrl);
+  
+    	expect(response).to.have.status(200);
+    
+    	return chakram.wait();
+
+	});
+
+});

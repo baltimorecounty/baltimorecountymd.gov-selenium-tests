@@ -1,18 +1,17 @@
-const frisby = require('frisby'),
+const chakram = require('chakram'),
+	expect = chakram.expect,
 	serviceUrl = 'http://localhost:1000/api/playlistgallery/PLE007697EAB31BACC';
 
-frisby.create('Get YouTube Playlist')
-	.get(serviceUrl)
-	.expectStatus(200)
-	.toss();
+describe("YouTube Playlist", () => {
 
-frisby.create('Get YouTube Playlist Count')
-	.get(serviceUrl)
-	.expectStatus(200)
-	.expectJSONTypes('', {
-		pageInfo: {
-			totalResults: Number,
-			resultsPerPage: Number
-		}
-	})
-	.toss();	
+	it("should return a playlist",  () => {
+
+		var response = chakram.get(serviceUrl);
+
+		expect(response).to.have.status(200);
+
+		return chakram.wait();
+
+	});
+
+}); 	

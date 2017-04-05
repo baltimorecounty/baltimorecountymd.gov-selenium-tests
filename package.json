@@ -23,12 +23,16 @@
     "flat": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-jasmine": "^2.4.2",
+    "gulp-mocha": "^4.3.0",
     "lodash": "^4.17.4",
     "selenium-webdriver": "^3.3.0"
   },
   "devDependencies": {
-    "frisby": "git://github.com/vlucas/frisby.git#v2",
+    "chai": "*",
+    "chakram": "^1.5.0",
+    "frisby": "^0.8.5",
     "gulp-webdriver": "^2.0.3",
-    "jasmine-spec-reporter": "^3.2.0"
+    "jasmine-spec-reporter": "^3.2.0",
+    "mocha": "*"
   }
 }

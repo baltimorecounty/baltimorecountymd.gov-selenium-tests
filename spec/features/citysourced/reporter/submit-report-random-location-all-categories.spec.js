@@ -1,4 +1,6 @@
 const webdriver = require('selenium-webdriver'),
+	chai = require('chai'),
+	expect = chai.expect,
 	fs = require('fs'),
 	_ = require('lodash'),
 	flatten = require('flat'),
@@ -34,7 +36,7 @@ describe('CitySourced reporter', () => {
 		categoryLeaves = getCategoryLeaves(categoryJson);
 		flattenedCategories = _.flattenDeep(categoryLeaves);
 
-		beforeAll(() => {
+		before(() => {
 			driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();			
 		});
 
@@ -57,7 +59,7 @@ describe('CitySourced reporter', () => {
 			categoryIndex++;
 		});
 
-		afterAll(function() {
+		after(function() {
 			driver.quit();
 		});
 
@@ -130,7 +132,7 @@ describe('CitySourced reporter', () => {
 					driver.findElement(By.css('.bc-citysourced-reporter-alert.alert-success h2')).then((successMessage) => {
 						driver.wait(until.elementIsVisible(successMessage), 10000).then((element) => {
 							element.getText().then((actual) => {						
-								expect(actual).toEqual('Your Submission Has Been Received', 'Success messge not visible.');
+								expect(actual).to.equal('Your Submission Has Been Received', 'Success messge not visible.');
 								done();
 							});
 						});

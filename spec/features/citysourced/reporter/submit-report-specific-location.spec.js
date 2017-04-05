@@ -1,4 +1,6 @@
 const webdriver = require('selenium-webdriver'),
+	chai = require('chai'),
+	expect = chai.expect,
     By = webdriver.By,
     until = webdriver.until,
 	stagingUrl = 'http://staging.baltimorecountymd.gov/CitySourced/preview/reporter';
@@ -9,7 +11,7 @@ describe('CitySourced reporter', () => {
 		
 		let driver, categories1, categories2, categories3, description, address, addressSearch, firstName, lastName, email, deviceNumber, fileReportButton;
 
-		beforeAll(() => {
+		before(() => {
 			driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
 		});
 
@@ -56,7 +58,7 @@ describe('CitySourced reporter', () => {
 					driver.findElement(By.css('.bc-citysourced-reporter-alert.alert-success h2')).then((successMessage) => {
 						driver.wait(until.elementIsVisible(successMessage), 10000).then((element) => {
 							element.getText().then((actual) => {						
-								expect(actual).toEqual('Your Submission Has Been Received', 'Success messge not visible.');
+								expect(actual).to.equal('Your Submission Has Been Received', 'Success messge not visible.');
 								done();
 							});
 						});
