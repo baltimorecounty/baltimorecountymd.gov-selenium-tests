@@ -62,6 +62,14 @@ describe('Tax Sale reporter', () => {
 
 
         clickNext = () => {
+            let nextBtn = driver.findElement(By.id('next'));
+            return nextBtn.click();
+        };
+
+        waitForFormSection = (formId) => {
+            driver.findElement(By.id(formId)).then((targetForm) => {
+                return driver.wait(until.elementIsVisible(targetForm), 10000);
+            });
         };
 
         performStep1 = () => {
@@ -90,21 +98,23 @@ describe('Tax Sale reporter', () => {
         }
 
         performStep2 = () => {
-            let nextBtn = driver.findElement(By.id('next'));
-            nextBtn.click().then(() => {
-                driver.findElement(By.id('TaxSale2013Step4')).then((taxStep2) => {
-                    driver.wait(until.elementIsVisible(taxStep2), 10000).then((element) => {
-                        driver.sleep(1000).then(() => {
-                            let agreeToCollectersTerm = driver.findElement(By.id('CollectorTermsCheck'));
-                            let agreeToInternetProcedures = driver.findElement(By.id('InternetProceduresCheck'));
+            clickNext().then(() => {
+                waitForFormSection('TaxSale2013Step4').then((targetForm) => {
+                    driver.sleep(1000).then(() => {
+                        let agreeToCollectersTerm = driver.findElement(By.id('CollectorTermsCheck'));
+                        let agreeToInternetProcedures = driver.findElement(By.id('InternetProceduresCheck'));
 
-                            agreeToCollectersTerm.click().then(() => {
-                                agreeToInternetProcedures.click().then(() => {
-                                });
+                        agreeToCollectersTerm.click().then(() => {
+                            agreeToInternetProcedures.click().then(() => {
                             });
                         });
                     });
-                });
+                })
+                // driver.findElement(By.id('TaxSale2013Step4')).then((taxStep2) => {
+                //     driver.wait(until.elementIsVisible(taxStep2), 10000).then((element) => {
+                        
+                //     });
+                // });
             });
         }
 
@@ -121,9 +131,7 @@ describe('Tax Sale reporter', () => {
             let taxId = driver.findElement(By.id('TaxpayerID'));
             let withHoldingBackup = driver.findElement(By.id('NoWithholding'));
 
-            let nextBtn = driver.findElement(By.id('next'));
-
-            nextBtn.click().then(() => {
+            clickNext().then(() => {
                 driver.findElement(By.id('TaxSale2013Step5')).then((taxStep3) => {
                     driver.wait(until.elementIsVisible(taxStep3), 10000).then((element) => {
                         driver.sleep(1000).then(() => {
@@ -152,9 +160,7 @@ describe('Tax Sale reporter', () => {
             let confirmAccountNumber = driver.findElement(By.id('AccountNumberConfirm'));
             let electronicSignature = driver.findElement(By.id('ElectronicSignature'));
 
-            let nextBtn = driver.findElement(By.id('next'));
-
-            nextBtn.click().then(() => {
+            clickNext().then(() => {
                 driver.findElement(By.id('TaxSale2013Step6')).then((taxStep3) => {
                     driver.wait(until.elementIsVisible(taxStep3), 10000).then((element) => {
                         driver.sleep(1000).then(() => {
@@ -186,7 +192,7 @@ describe('Tax Sale reporter', () => {
         expectSubmitToBeEnabled = (done) => {
             let submitBtn = driver.findElement(By.id('submit'));
 
-            nextBtn.isEnabled().then((isEnabled) => {
+            submitBtn.isEnabled().then((isEnabled) => {
                 expect(true).toEqual(isEnabled);
                 if (done && typeof done === 'function') {
                     done();
@@ -211,7 +217,7 @@ describe('Tax Sale reporter', () => {
 
         it('Can Fill out Step 4 successfully', (done) => {
             performStep4();
-            expectNextToBeEnabled(done);
+            expectSubmitToBeEnabled(done);
         });
     });
 });
