@@ -228,12 +228,14 @@ TestCases.forEach((testCase, index) => {
             });
         }
 
-        it('Has Valid Test Data', (done) => {
+        it('Has valid test data', (done) => {
             let hasValidTestData = hasValidStep1TestData(testCase.step1);
             expect(true).toEqual(hasValidTestData);
-            if (done && typeof done === 'function') {
-                done();
-            }
+            driver.sleep(1000).then(() => {
+                if (done && typeof done === 'function') {
+                    done();
+                }
+            })
         });
 
         it('Step 1', (done) => {
