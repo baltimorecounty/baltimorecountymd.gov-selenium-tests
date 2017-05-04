@@ -1,17 +1,18 @@
 const webdriver = require('selenium-webdriver'),
     By = webdriver.By,
     until = webdriver.until,
-    productionUrl = 'http://www.baltimorecountymd.gov/Agencies/budfin/customerservice/taxpayerservices/tax_sale/registration2017.html';
+    productionUrl = 'http://www.baltimorecountymd.gov/Agencies/budfin/customerservice/taxpayerservices/tax_sale/registration2017.html',
+    TestCases = require('../test-cases.json');
+
+let driver;
 
 describe('Tax Sale reporter', () => {
-    let driver;
-
     describe('Can submit a report as an individual', () => {
         beforeAll(() => {
             driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
             driver.get(productionUrl);
         });
-
+        
         afterAll(function() {
             driver.quit();
         });
@@ -51,8 +52,10 @@ describe('Tax Sale reporter', () => {
             });
         };
 
-        performStep1 = () => {
-            let registeringAs = driver.findElement(By.id('BusinessType1'));
+        performStep1 = (data) => {
+            var isIndividual = data.registeringAs && data.registeringAs.toLowerCase().indexOf("individual") > -1;
+            let registeringAs = isIndividual ? driver.findElement(By.id('BusinessType1')) : driver.findElement(By.id('BusinessType2'));
+
             let firstName = driver.findElement(By.id('FirstName'));
             let lastName = driver.findElement(By.id('LastName'));
             let streetAddress1 = driver.findElement(By.id('StreetAddress1'));
@@ -63,27 +66,31 @@ describe('Tax Sale reporter', () => {
             let phone = driver.findElement(By.id('Phone'));
             let email = driver.findElement(By.id('EmailAddress'));
 
+            //TODO: Add Business Fields
+
             registeringAs.click();
 
-            firstName.sendKeys("John");
-            lastName.sendKeys("Doe");
-            streetAddress1.sendKeys("400 Washington Ave");
-            streetAddress2.sendKeys("");
-            city.sendKeys("Towson");
-            state.sendKeys("Maryland"); //Probably going to fail
-            zip.sendKeys("21204");
-            phone.sendKeys("2222222222");
-            email.sendKeys("jdoe@baltimorecountymd.gov");
+            firstName.sendKeys(data.firstName);
+            lastName.sendKeys(data.lastName);
+            streetAddress1.sendKeys(data.streetAddress1);
+            streetAddress2.sendKeys(data.streetAddress2);
+            city.sendKeys(data.city);
+            state.sendKeys(data.state); //Probably going to fail
+            zip.sendKeys(data.zip);
+            phone.sendKeys(data.phone);
+            email.sendKeys(data.email);
         };
 
-        performStep2 = () => {
+        performStep2 = (data) => {
            completeForm = () => {
                 let agreeToCollectersTerm = driver.findElement(By.id('CollectorTermsCheck'));
                 let agreeToInternetProcedures = driver.findElement(By.id('InternetProceduresCheck'));
 
-                agreeToCollectersTerm.click().then(() => {
-                    agreeToInternetProcedures.click();
-                });
+                if (data.agreeToCollectersTerm && data.agreeToInternetProcedures) {
+                    agreeToCollectersTerm.click().then(() => {
+                        agreeToInternetProcedures.click();
+                    });
+                }
            }
 
             clickNext().then(() => {
@@ -91,7 +98,7 @@ describe('Tax Sale reporter', () => {
             });
         };
 
-        performStep3 = () => {
+        performStep3 = (data) => {
             let legalEntity = driver.findElement(By.id('NameW9'));
             let businessName = driver.findElement(By.id('BusinessName'));
             let typeOfBusiness = driver.findElement(By.id('businesstype'));
@@ -105,16 +112,20 @@ describe('Tax Sale reporter', () => {
             let withHoldingBackup = driver.findElement(By.id('NoWithholding'));
 
             completeForm = () => {
-                legalEntity.sendKeys("Legit Legal Entity Corp");
-                businessName.sendKeys("Really Legit Legal Entity Corp");
-                typeOfBusiness.sendKeys("Financial");
-                address1.sendKeys("200 Washington Ave");
-                address2.sendKeys("");
-                city.sendKeys("Towson");
-                state.sendKeys("Maryland");
-                zip.sendKeys("21204");
-                phone.sendKeys("2222222222");
-                taxId.sendKeys("999999999");
+                legalEntity.sendKeys(data.legalEntity);
+                businessName.sendKeys(data.businessName);
+                typeOfBusiness.sendKeys(data.typeOfBusiness);
+                address1.sendKeys(data.address1);
+                address2.sendKeys(data.address2);
+                city.sendKeys(data.city);
+                state.sendKeys(data.state);
+                zip.sendKeys(data.zip);
+                phone.sendKeys(data.phone);
+                taxId.sendKeys(data.taxId);
+
+                if (data.withHoldingBackup) {
+                    withHoldingBackup.click();
+                }
             };
 
             clickNext().then(() => {
@@ -122,8 +133,9 @@ describe('Tax Sale reporter', () => {
             });
         };
 
-        performStep4 = () => {
-            let typeOfAcccount = driver.findElement(By.id('AccountType1'));
+        performStep4 = (data) => {
+            let isSavings = data.typeOfAcccount && data.typeOfAcccount.toLowerCase().indexOf("checking") > -1;
+            let typeOfAcccount = isSavings ? driver.findElement(By.id('AccountType1')) : driver.findElement(By.id('AccountType2'));
             let accountEntity = driver.findElement(By.id('EntityName'));
             let bankName = driver.findElement(By.id('BankName'));
             let routingNumber = driver.findElement(By.id('RoutingNumber'));
@@ -133,12 +145,15 @@ describe('Tax Sale reporter', () => {
 
             completeForm = () => {
                 typeOfAcccount.click();
-                accountEntity.sendKeys("Legit Legal Entity Corp");
-                bankName.sendKeys("ABC BANK");
-                routingNumber.sendKeys("111111111");
-                accountNumber.sendKeys("123456789123");
-                confirmAccountNumber.sendKeys("123456789123");
-                electronicSignature.click();
+                accountEntity.sendKeys(data.accountEntity);
+                bankName.sendKeys(data.bankName);
+                routingNumber.sendKeys(data.routingNumber);
+                accountNumber.sendKeys(data.accountNumber);
+                confirmAccountNumber.sendKeys(data.confirmAccountNumber);
+
+                if (data.electronicSignature) {
+                    electronicSignature.click();
+                }
             };
 
             clickNext().then(() => {
@@ -146,24 +161,29 @@ describe('Tax Sale reporter', () => {
             });
         }
 
-        it('Can Fill out Step 1 successfully', (done) => {
-            performStep1();
-            expectNextToBeEnabled(done);
-        });
 
-        it('Can Fill out Step 2 successfully', (done) => {
-            performStep2();
-            expectNextToBeEnabled(done);
-        });
+        TestCases.forEach((testCase, index) => {
 
-        it('Can Fill out Step 3 successfully', (done) => {
-            performStep3();
-            expectNextToBeEnabled(done);
-        });
+            it('Can Fill out Step 1 successfully: ' + testCase.expectedResultMessage, (done) => {
+                performStep1(testCase.step1);
+                expectNextToBeEnabled(done);
+            });
 
-        it('Can Fill out Step 4 successfully', (done) => {
-            performStep4();
-            expectSubmitToBeEnabled(done);
+            it('Can Fill out Step 2 successfully: ' + testCase.expectedResultMessage, (done) => {
+                performStep2(testCase.step2);
+                expectNextToBeEnabled(done);
+            });
+
+            it('Can Fill out Step 3 successfully: ' + testCase.expectedResultMessage, (done) => {
+                performStep3(testCase.step3);
+                expectNextToBeEnabled(done);
+            });
+
+            it('Can Fill out Step 4 successfully: ' + testCase.expectedResultMessage, (done) => {
+                performStep4(testCase.step4);
+                expectSubmitToBeEnabled(done);
+            });
+
         });
     });
 });
