@@ -7,12 +7,14 @@ const webdriver = require('selenium-webdriver'),
 let driver;
 
 TestCases.forEach((testCase, index) => {
-    let expectedResult = testCase.expectedResult === 'success';
-    let failureStep = testCase.failureStep || 0;
-    let isReportingAsAnIndividual = testCase.step1.registeringAs && testCase.step1.registeringAs.toLowerCase().indexOf("individual") > -1;
 
     describe(testCase.expectedResultMessage, () => {
+
+
         beforeAll(() => {
+            this.expectedResult = testCase.expectedResult === 'success';
+            this.failureStep = testCase.failureStep || 0;
+            this.isIndividual = testCase.step1.registeringAs && testCase.step1.registeringAs.toLowerCase().indexOf("individual") > -1;
             driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
             driver.get(productionUrl);
         });
@@ -58,8 +60,8 @@ TestCases.forEach((testCase, index) => {
         };
 
         hasValidStep1TestData = (data) => {
-            if (isReportingAsAnIndividual) {
-                return data && data.hasOwnProperty('firstName') && data.firstName &&
+            if (this.isIndividual) {
+                return !!(data && data.hasOwnProperty('firstName') && data.firstName &&
                     data.hasOwnProperty('lastName') && data.lastName &&
                     data.hasOwnProperty('streetAddress1') && data.streetAddress1 &&
                     data.hasOwnProperty('streetAddress2') &&
@@ -67,11 +69,11 @@ TestCases.forEach((testCase, index) => {
                     data.hasOwnProperty('state') && data.state &&
                     data.hasOwnProperty('zip') && data.zip &&
                     data.hasOwnProperty('phone') && data.phone &&
-                    data.hasOwnProperty('email') && data.email;
+                    data.hasOwnProperty('email') && data.email);
             }
 
             //Is Corporation
-            return data && data.hasOwnProperty('companyEntity') && data.companyEntity &&
+            return !!(data && data.hasOwnProperty('companyEntity') && data.companyEntity &&
                 data.hasOwnProperty('residentAgentName') && data.residentAgentName &&
                 data.hasOwnProperty('streetAddress1') && data.streetAddress1 &&
                 data.hasOwnProperty('streetAddress2') &&
@@ -83,16 +85,16 @@ TestCases.forEach((testCase, index) => {
                 data.hasOwnProperty('nameOnCertificate') && data.nameOnCertificate &&
                 data.hasOwnProperty('isMarylandEntity') &&
                 data.hasOwnProperty('personalPropertyTaxId') &&
-                data.hasOwnProperty('inGoodStanding');
+                data.hasOwnProperty('inGoodStanding'));
         };
 
         performStep1 = (data) => {
             waitForFormSection('TaxSale2013Step1FirstStep').then(() => {
-                let registeringAs = isReportingAsAnIndividual ? driver.findElement(By.id('BusinessType1')) : driver.findElement(By.id('BusinessType2'));
+                let registeringAs = this.isIndividual ? driver.findElement(By.id('BusinessType1')) : driver.findElement(By.id('BusinessType2'));
 
                 registeringAs.click();
 
-                if (isReportingAsAnIndividual) {
+                if (this.isIndividual) {
                     let firstName = driver.findElement(By.id('FirstName'));
                     let lastName = driver.findElement(By.id('LastName'));
                     let streetAddress1 = driver.findElement(By.id('StreetAddress1'));
@@ -240,27 +242,41 @@ TestCases.forEach((testCase, index) => {
 
         it('Step 1', (done) => {
             performStep1(testCase.step1);
-            expectNextToBeEnabled(expectedResult, done);
+            expectNextToBeEnabled(this.expectedResult, done);
         });
 
-        if (failureStep > 1 || !failureStep) {
-            it('Step 2', (done) => {
+        it('Step 2', (done) => {
+            if (this.failureStep > 1 || !this.failureStep) {
                 performStep2(testCase.step2);
-                expectNextToBeEnabled(expectedResult, done);
-            });
-        }
-        if (failureStep > 2 || !failureStep) {
-            it('Step 3', (done) => {
+                expectNextToBeEnabled(this.expectedResult, done);
+            } else {
+                // expect("This test was skipped but is the expected result").toEqual();
+                done();
+            }
+        });
+
+
+        it('Step 3', (done) => {
+            if (this.failureStep > 2 || !this.failureStep) {
                 performStep3(testCase.step3);
-                expectNextToBeEnabled(expectedResult, done);
-            });
-        }
-        if (failureStep > 3 || !failureStep) {
-            it('Step 4', (done) => {
+                expectNextToBeEnabled(this.expectedResult, done);
+            }
+            else {
+                // expect("This test was skipped but is the expected result").toEqual();
+                done();
+            }
+        });
+
+        it('Step 4', (done) => {
+            if (this.failureStep > 3 || !this.failureStep) {
                 performStep4(testCase.step4);
-                expectSubmitToBeEnabled(expectedResult, done);
-            });
-        }
+                expectSubmitToBeEnabled(this.expectedResult, done);
+            }
+            else {
+                // expect("This test was skipped but is the expected result").toEqual();
+                done();
+            }
+        });
 
     });
 });
