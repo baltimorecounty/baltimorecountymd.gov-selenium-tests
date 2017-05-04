@@ -9,6 +9,8 @@ let driver;
 TestCases.forEach((testCase, index) => {
     let expectedResult = testCase.expectedResult === 'success';
     let failureStep = testCase.failureStep || 0;
+    let isReportingAsAnIndividual = testCase.step1.registeringAs && testCase.step1.registeringAs.toLowerCase().indexOf("individual") > -1;
+
     describe(testCase.expectedResultMessage, () => {
         beforeAll(() => {
             driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
@@ -55,33 +57,95 @@ TestCases.forEach((testCase, index) => {
             });
         };
 
+        hasValidStep1TestData = (data) => {
+            if (isReportingAsAnIndividual) {
+                return data && data.hasOwnProperty('firstName') && data.firstName &&
+                    data.hasOwnProperty('lastName') && data.lastName &&
+                    data.hasOwnProperty('streetAddress1') && data.streetAddress1 &&
+                    data.hasOwnProperty('streetAddress2') &&
+                    data.hasOwnProperty('city') && data.city &&
+                    data.hasOwnProperty('state') && data.state &&
+                    data.hasOwnProperty('zip') && data.zip &&
+                    data.hasOwnProperty('phone') && data.phone &&
+                    data.hasOwnProperty('email') && data.email;
+            }
+
+            //Is Corporation
+            return data && data.hasOwnProperty('companyEntity') && data.companyEntity &&
+                data.hasOwnProperty('residentAgentName') && data.residentAgentName &&
+                data.hasOwnProperty('streetAddress1') && data.streetAddress1 &&
+                data.hasOwnProperty('streetAddress2') &&
+                data.hasOwnProperty('city') && data.city &&
+                data.hasOwnProperty('state') && data.state &&
+                data.hasOwnProperty('zip') && data.zip &&
+                data.hasOwnProperty('phone') && data.phone &&
+                data.hasOwnProperty('email') && data.email &&
+                data.hasOwnProperty('nameOnCertificate') && data.nameOnCertificate &&
+                data.hasOwnProperty('isMarylandEntity') &&
+                data.hasOwnProperty('personalPropertyTaxId') &&
+                data.hasOwnProperty('inGoodStanding');
+        };
+
         performStep1 = (data) => {
-            var isIndividual = data.registeringAs && data.registeringAs.toLowerCase().indexOf("individual") > -1;
-            let registeringAs = isIndividual ? driver.findElement(By.id('BusinessType1')) : driver.findElement(By.id('BusinessType2'));
+            waitForFormSection('TaxSale2013Step1FirstStep').then(() => {
+                let registeringAs = isReportingAsAnIndividual ? driver.findElement(By.id('BusinessType1')) : driver.findElement(By.id('BusinessType2'));
 
-            let firstName = driver.findElement(By.id('FirstName'));
-            let lastName = driver.findElement(By.id('LastName'));
-            let streetAddress1 = driver.findElement(By.id('StreetAddress1'));
-            let streetAddress2 = driver.findElement(By.id('StreetAddress2'));
-            let city = driver.findElement(By.id('City'));
-            let state = driver.findElement(By.id('State'));
-            let zip = driver.findElement(By.id('ZipCode'));
-            let phone = driver.findElement(By.id('Phone'));
-            let email = driver.findElement(By.id('EmailAddress'));
+                registeringAs.click();
 
-            //TODO: Add Business Fields
+                if (isReportingAsAnIndividual) {
+                    let firstName = driver.findElement(By.id('FirstName'));
+                    let lastName = driver.findElement(By.id('LastName'));
+                    let streetAddress1 = driver.findElement(By.id('StreetAddress1'));
+                    let streetAddress2 = driver.findElement(By.id('StreetAddress2'));
+                    let city = driver.findElement(By.id('City'));
+                    let state = driver.findElement(By.id('State'));
+                    let zip = driver.findElement(By.id('ZipCode'));
+                    let phone = driver.findElement(By.id('Phone'));
 
-            registeringAs.click();
 
-            firstName.sendKeys(data.firstName);
-            lastName.sendKeys(data.lastName);
-            streetAddress1.sendKeys(data.streetAddress1);
-            streetAddress2.sendKeys(data.streetAddress2);
-            city.sendKeys(data.city);
-            state.sendKeys(data.state); //Probably going to fail
-            zip.sendKeys(data.zip);
-            phone.sendKeys(data.phone);
-            email.sendKeys(data.email);
+                    firstName.sendKeys(data.firstName);
+                    lastName.sendKeys(data.lastName);
+                    streetAddress1.sendKeys(data.streetAddress1);
+                    streetAddress2.sendKeys(data.streetAddress2);
+                    city.sendKeys(data.city);
+                    state.sendKeys(data.state); //Probably going to fail
+                    zip.sendKeys(data.zip);
+                    phone.sendKeys(data.phone);
+
+                } else { //Submitting the form as a Corporation
+                    let companyEntity = driver.findElement(By.id('CompanyEntity'));
+                    let residentAgentName = driver.findElement(By.id('MDResidentAgentNameBidder'));
+                    let phone = driver.findElement(By.id('MDLocalPhone'));
+                    let streetAddress1 = driver.findElement(By.id('MDLocalContactAddress'));
+                    let streetAddress2 = driver.findElement(By.id('MDLocalContactAddress2'));
+                    let city = driver.findElement(By.id('MDLocalContactCity'));
+                    let state = driver.findElement(By.id('LocalContactState'));
+                    let zip = driver.findElement(By.id('LocalContactZipCode'));
+                    let nameOnCertificate = driver.findElement(By.id('NameCertificate'));
+                    let isMarylandEntity = data.isMarylandEntity ? driver.findElement(By.id('MarylandEntity1')) : driver.findElement(By.id('MarylandEntity2'));
+                    let personalPropertyTaxId = driver.findElement(By.id('PersonalPropertyNumber'));
+                    let inGoodStanding = data.inGoodStanding ? driver.findElement(By.id('InGoodStanding1')) : driver.findElement(By.id('InGoodStanding2'));
+
+                    companyEntity.sendKeys(data.companyEntity);
+                    residentAgentName.sendKeys(data.residentAgentName);
+                    streetAddress1.sendKeys(data.streetAddress1);
+                    streetAddress2.sendKeys(data.streetAddress2);
+                    city.sendKeys(data.city);
+                    state.sendKeys(data.state); //Probably going to fail
+                    zip.sendKeys(data.zip);
+                    phone.sendKeys(data.phone);
+                    nameOnCertificate.sendKeys(data.nameOnCertificate);
+
+                    isMarylandEntity.click();
+                    if (isMarylandEntity) {
+                        personalPropertyTaxId.sendKeys(data.personalPropertyTaxId);
+                    }
+                    inGoodStanding.click();
+                }
+
+                let email = driver.findElement(By.id('EmailAddress'));
+                email.sendKeys(data.email);
+            });
         };
 
         performStep2 = (data) => {
@@ -163,6 +227,14 @@ TestCases.forEach((testCase, index) => {
                 waitForFormSection('TaxSale2013Step6').then(completeForm);
             });
         }
+
+        it('Has Valid Test Data', (done) => {
+            let hasValidTestData = hasValidStep1TestData(testCase.step1);
+            expect(true).toEqual(hasValidTestData);
+            if (done && typeof done === 'function') {
+                done();
+            }
+        });
 
         it('Step 1', (done) => {
             performStep1(testCase.step1);
