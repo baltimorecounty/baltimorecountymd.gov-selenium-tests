@@ -77,15 +77,17 @@ describe('Tax Sale reporter', () => {
         };
 
         performStep2 = () => {
-            clickNext().then(() => {
-                waitForFormSection('TaxSale2013Step4').then((targetForm) => {
-                    let agreeToCollectersTerm = driver.findElement(By.id('CollectorTermsCheck'));
-                    let agreeToInternetProcedures = driver.findElement(By.id('InternetProceduresCheck'));
+           completeForm = () => {
+                let agreeToCollectersTerm = driver.findElement(By.id('CollectorTermsCheck'));
+                let agreeToInternetProcedures = driver.findElement(By.id('InternetProceduresCheck'));
 
-                    agreeToCollectersTerm.click().then(() => {
-                        agreeToInternetProcedures.click();
-                    });
+                agreeToCollectersTerm.click().then(() => {
+                    agreeToInternetProcedures.click();
                 });
+           }
+
+            clickNext().then(() => {
+                waitForFormSection('TaxSale2013Step4').then(completeForm);
             });
         };
 
@@ -102,19 +104,21 @@ describe('Tax Sale reporter', () => {
             let taxId = driver.findElement(By.id('TaxpayerID'));
             let withHoldingBackup = driver.findElement(By.id('NoWithholding'));
 
+            completeForm = () => {
+                legalEntity.sendKeys("Legit Legal Entity Corp");
+                businessName.sendKeys("Really Legit Legal Entity Corp");
+                typeOfBusiness.sendKeys("Financial");
+                address1.sendKeys("200 Washington Ave");
+                address2.sendKeys("");
+                city.sendKeys("Towson");
+                state.sendKeys("Maryland");
+                zip.sendKeys("21204");
+                phone.sendKeys("2222222222");
+                taxId.sendKeys("999999999");
+            };
+
             clickNext().then(() => {
-                waitForFormSection('TaxSale2013Step5').then((targetForm) => {
-                    legalEntity.sendKeys("Legit Legal Entity Corp");
-                    businessName.sendKeys("Really Legit Legal Entity Corp");
-                    typeOfBusiness.sendKeys("Financial");
-                    address1.sendKeys("200 Washington Ave");
-                    address2.sendKeys("");
-                    city.sendKeys("Towson");
-                    state.sendKeys("Maryland");
-                    zip.sendKeys("21204");
-                    phone.sendKeys("2222222222");
-                    taxId.sendKeys("999999999");
-                });
+                waitForFormSection('TaxSale2013Step5').then(completeForm);
             });
         };
 
@@ -127,16 +131,18 @@ describe('Tax Sale reporter', () => {
             let confirmAccountNumber = driver.findElement(By.id('AccountNumberConfirm'));
             let electronicSignature = driver.findElement(By.id('ElectronicSignature'));
 
+            completeForm = () => {
+                typeOfAcccount.click();
+                accountEntity.sendKeys("Legit Legal Entity Corp");
+                bankName.sendKeys("ABC BANK");
+                routingNumber.sendKeys("111111111");
+                accountNumber.sendKeys("123456789123");
+                confirmAccountNumber.sendKeys("123456789123");
+                electronicSignature.click();
+            };
+
             clickNext().then(() => {
-                waitForFormSection('TaxSale2013Step6').then((targetForm) => {
-                    typeOfAcccount.click();
-                    accountEntity.sendKeys("Legit Legal Entity Corp");
-                    bankName.sendKeys("ABC BANK");
-                    routingNumber.sendKeys("111111111");
-                    accountNumber.sendKeys("123456789123");
-                    confirmAccountNumber.sendKeys("123456789123");
-                    electronicSignature.click();
-                });
+                waitForFormSection('TaxSale2013Step6').then(completeForm);
             });
         }
 
