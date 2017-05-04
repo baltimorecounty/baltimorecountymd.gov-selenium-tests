@@ -44,7 +44,7 @@
     {
         "shouldSubmit": false,
         "expectedResult": "failure",
-        "expectedResultMessage": "User Enters an Invalid Phone Number, Step 1, User can't proceed.",
+        "expectedResultMessage": "User Enters an Invalid Phone Number in Step 1, User can't proceed with the form.",
         "failureStep": 1,
         "step1": {
             "registeringAs": "Individual/Sole Proprietor",
