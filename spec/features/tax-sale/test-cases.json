@@ -1,7 +1,7 @@
 [{
         "shouldSubmit": false,
         "expectedResult": "success",
-        "expectedResultMessage": "Individual Submits the Form",
+        "expectedResultMessage": "Form is Successfully Submitted by an Individual",
         "step1": {
             "registeringAs": "Individual/Sole Proprietor",
             "firstName": "John",
@@ -44,7 +44,8 @@
     {
         "shouldSubmit": false,
         "expectedResult": "failure",
-        "expectedResultMessage": "Invalid Phone Number, Step 1",
+        "expectedResultMessage": "User Enters an Invalid Phone Number, Step 1, User can't proceed.",
+        "failureStep": 1,
         "step1": {
             "registeringAs": "Individual/Sole Proprietor",
             "firstName": "Jane",
