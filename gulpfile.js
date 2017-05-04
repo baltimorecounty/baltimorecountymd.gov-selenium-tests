@@ -9,3 +9,11 @@ gulp.task('default', () => {
 			timeout: 30000
 		}));
 });
+
+gulp.task('tax-sale', () => {
+	gulp.src('spec/features/tax-sale/**/*.js')
+		.pipe(jasmine({
+			reporter: new SpecReporter(),
+			timeout: 30000
+		}));
+});
