@@ -1,0 +1,41 @@
+[{
+    "shouldSubmit": false,
+    "step1": {
+        "registeringAs": "Individual/Sole Proprietor",
+        "firstName": "John",
+        "lastName": "Doe",
+        "streetAddress1": "400 Washington Ave",
+        "streetAddress2": "",
+        "city": "Towson",
+        "state": "Maryland",
+        "zip": "21204",
+        "phone": "2222222222",
+        "email": "jdoe@baltimorecountymd.gov"
+    },
+    "step2": {
+        "agreeToCollectersTerm": true,
+        "agreeToInternetProcedures": true
+    },
+    "step3": {
+        "legalEntity": "Legit Legal Entity",
+        "businessName": "Toys R Me",
+        "typeOfBusiness": "Retail",
+        "address1": "200 Washington Ave",
+        "address2": "",
+        "city": "Towson",
+        "state": "Maryland",
+        "zip": "21204",
+        "phone": "3333333333",
+        "taxId": "999999999",
+        "withHoldingBackup": false
+    },
+    "step4": {
+        "typeOfAcccount": "Checking",
+        "accountEntity": "Toys R Me",
+        "bankName": "ABC Bank",
+        "routingNumber": "111111111",
+        "accountNumber": "9999999999999999",
+        "confirmAccountNumber": "9999999999999999",
+        "electronicSignature": true
+    }
+}]
