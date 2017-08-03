@@ -17,8 +17,16 @@ gulp.task('tax-sale', () => {
 		}));
 });
 
-gulp.task('features-quick', () => {
+gulp.task('baltcogo-random-all', () => {
 	gulp.src(['spec/features/citysourced/reporter/submit-report-random-location-all-categories.spec.js'])
+		.pipe(mocha({
+			reporter: 'spec',
+			timeout: 30000
+		}));
+});
+
+gulp.task('baltcogo-specific', () => {
+	gulp.src(['spec/features/citysourced/reporter/submit-report-specific-location.spec.js'])
 		.pipe(mocha({
 			reporter: 'spec',
 			timeout: 30000
