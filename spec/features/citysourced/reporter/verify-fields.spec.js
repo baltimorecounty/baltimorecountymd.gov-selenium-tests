@@ -3,7 +3,7 @@ const webdriver = require('selenium-webdriver'),
 	expect = chai.expect,
     By = webdriver.By,
     until = webdriver.until,
-	stagingUrl = 'http://staging.baltimorecountymd.gov/CitySourced/preview/reporter';
+	stagingUrl = 'http://staging.baltimorecountymd.gov/baltcogo/reporter';
 
 describe('CitySourced reporter', () => {
 
@@ -20,8 +20,8 @@ describe('CitySourced reporter', () => {
 			driver.quit().then(done);
 		});
 
-		it ('should have a visible "categories[1]" field', (done) => {
-			const description = driver.findElement(By.id('categories[1]')).then((element) => {
+		it ('should have a visible "categories" field', (done) => {
+			const description = driver.findElement(By.id('categories')).then((element) => {
 				element.isDisplayed().then((actual) => {
 					expect(actual).to.equal(true);
 					done();

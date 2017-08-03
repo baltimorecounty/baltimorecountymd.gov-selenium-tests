@@ -1,0 +1,82 @@
+[{
+	"name": "Pets and Animals",
+	"id": 1023379,
+	"types": [{
+			"name": "Animal cruelty",
+			"id": 1023420
+		},
+		{
+			"name": "Animal caught in a trap",
+			"id": 1023421
+		},
+		{
+			"name": "Animal shows signs of rabies",
+			"id": 1023422
+		},
+		{
+			"name": "Animals in vacant property",
+			"id": 1023423
+		},
+		{
+			"name": "Bite from a pet",
+			"id": 1023424
+		},
+		{
+			"name": "Dangerous dog",
+			"id": 1023425
+		},
+		{
+			"name": "Dead animal pickup",
+			"id": 1023426
+		},
+		{
+			"name": "Excessive barking",
+			"id": 1023427
+		},
+		{
+			"name": "Menacing animal",
+			"id": 1023428
+		},
+		{
+			"name": "Nuisance animal",
+			"id": 1023429
+		},
+		{
+			"name": "Pet out of yard or roaming",
+			"id": 1023431
+		},
+		{
+			"name": "Pet waste was left in my yard",
+			"id": 1023432
+		},
+		{
+			"name": "Sick or injured animal",
+			"id": 1023433
+		},
+		{
+			"name": "Stray pet found and needs pickup",
+			"id": 1023434
+		},
+		{
+			"name": "Wildlife complaint",
+			"id": 1023435
+		},
+		{
+			"name": "Other animal complaint",
+			"id": 1023430
+		}
+	],
+	"fields": {
+		"streetAddress": 1023529,
+		"city": 1023530,
+		"zipCode": 1023532
+	},
+	"states": [{
+		"name": "MD",
+		"id": 1023615
+	}],
+	"descriptionOfAnimal": 1023524,
+	"descriptionOfLocation": 1023525,
+	"description": 1024807
+
+}]

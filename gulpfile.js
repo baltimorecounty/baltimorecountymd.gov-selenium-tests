@@ -10,7 +10,7 @@ gulp.task('features', () => {
 });
 
 gulp.task('features-quick', () => {
-	gulp.src(['spec/features/citysourced/reporter/submit-report-specific-location.spec.js', 'spec/features/citysourced/reporter/verify-fields.spec.js'])
+	gulp.src(['spec/features/citysourced/reporter/submit-report-random-location-all-categories.spec.js'])
 		.pipe(mocha({
 			reporter: 'spec',
 			timeout: 30000

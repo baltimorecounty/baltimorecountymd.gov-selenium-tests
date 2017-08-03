@@ -24,6 +24,7 @@
     "gulp": "^3.9.1",
     "gulp-jasmine": "^2.4.2",
     "gulp-mocha": "^4.3.0",
+    "karma": "^1.7.0",
     "lodash": "^4.17.4",
     "selenium-webdriver": "^3.3.0"
   },
