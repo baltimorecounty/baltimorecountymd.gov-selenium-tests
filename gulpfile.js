@@ -9,6 +9,14 @@ gulp.task('features', () => {
 		}));
 });
 
+gulp.task('tax-sale', () => {
+	gulp.src('spec/features/tax-sale/**/*.js')
+		.pipe(jasmine({
+			reporter: new SpecReporter(),
+			timeout: 30000
+		}));
+});
+
 gulp.task('features-quick', () => {
 	gulp.src(['spec/features/citysourced/reporter/submit-report-random-location-all-categories.spec.js'])
 		.pipe(mocha({
@@ -26,3 +34,4 @@ gulp.task('services', () => {
 });
 
 gulp.task('default', ['services', 'features'], () => {});
+

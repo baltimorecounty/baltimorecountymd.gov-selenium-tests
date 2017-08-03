@@ -12,3 +12,6 @@ This project is the collection of automation for features for the BaltimoreCount
     * [Chrome Driver](http://chromedriver.storage.googleapis.com/index.html)
 	* [IE Driver](http://selenium-release.storage.googleapis.com/index.html)
 	* [FireFox Driver](https://github.com/mozilla/geckodriver/releases/)
+	
+## Documentation
+* [selenium-webdriver api](https://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
