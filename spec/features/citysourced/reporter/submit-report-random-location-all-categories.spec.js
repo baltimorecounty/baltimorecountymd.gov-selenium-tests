@@ -7,7 +7,7 @@ const webdriver = require('selenium-webdriver'),
 	categoryJson = require('../../../../data/categories.json'),
     By = webdriver.By,
 	until = webdriver.until,
-	stagingUrl = 'http://staging.baltimorecountymd.gov/CitySourced/preview/reporter';
+	stagingUrl = 'http://staging.baltimorecountymd.gov/baltcogo/reporter';
 
 const getCategoryLeaves = (myData) => {
 	let list = [];
