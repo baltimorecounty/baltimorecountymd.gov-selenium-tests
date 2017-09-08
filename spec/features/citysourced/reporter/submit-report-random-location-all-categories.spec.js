@@ -48,7 +48,7 @@ describe('CitySourced reporter', () => {
 		});
 
 		beforeEach(() => {
-			driver.manage().window().setSize(1200, 900);
+			driver.manage().window().setSize(1200, 1000);
 			driver.get(stagingUrl);
 
 			categories1 = driver.findElement(By.id('categories'));
@@ -93,9 +93,10 @@ describe('CitySourced reporter', () => {
 
 				description.sendKeys('This is a sample description. Do not be alarmed by how samply it is.');
 
-				driver.wait(until.elementLocated(By.id('nextButton')), 10000);
-
-				nextButton.click();
+/* 				driver.wait(until.elementLocated(By.id('nextButton')), 5000);
+				driver.wait(until.elementIsVisible(By.id('nextButton')), 5000);
+ */				
+				driver.findElement(By.id('nextButton')).click();
 
 				// Second panel ------ address and location description
 
@@ -141,17 +142,17 @@ describe('CitySourced reporter', () => {
 								});
 							});
 
-							nextButton.click().then(
-								() => driver.sleep(1000),
-								(err) => {
-									console.log(err);
-								});
+/* 							driver.wait(until.elementLocated(By.id('nextButton')), 5000);
+							driver.wait(until.elementIsVisible(By.id('nextButton')), 5000);
+ */
+							driver.findElement(By.id('nextButton')).click();
 						});
 					}
 				});
 
-				let fileReportButton = driver.findElement(By.id('fileReportButton'));
-
+/* 				driver.wait(until.elementLocated(By.id('fileReportButton')), 5000);
+				driver.wait(until.elementIsVisible(By.id('fileReportButton')), 5000);
+ */
 				firstName.sendKeys('Test');
 				lastName.sendKeys('Automation');
 
@@ -164,7 +165,7 @@ describe('CitySourced reporter', () => {
 				email.sendKeys('mxsnyder@baltimorecountymd.gov');
 				deviceNumber.sendKeys('410-887-1521');
 
-				fileReportButton.click().then(() => {
+				driver.findElement(By.id('fileReportButton')).click().then(() => {
 					driver.wait(until.elementLocated(By.css('.bc-citysourced-reporter-alert.alert-success h2')), 10000).then((successMessage) => {
 						successMessage.getText().then((actual) => {
 							expect(actual).to.equal('Your Submission Has Been Received', 'Success message not visible.');
