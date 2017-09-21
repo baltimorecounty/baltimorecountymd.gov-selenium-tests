@@ -20,8 +20,8 @@ describe('CitySourced reporter', () => {
         });
 
         beforeEach(() => {
-			driver.manage().window().setSize(1200, 1000);
-			driver.get(stagingUrl);
+            driver.manage().window().setSize(1200, 1000);
+            driver.get(stagingUrl);
         });
 
         it('A user can move to the third panel of the form with an invalid address', (done) => {
@@ -37,8 +37,8 @@ describe('CitySourced reporter', () => {
         });
 
         after(function () {
-			driver.quit();
-		});
+            driver.quit();
+        });
 
     });
 });
