@@ -7,13 +7,9 @@ function monkeyBusiness(driver) {
     var self = this;
     self.driver = driver;
 
-
-
     function chooseAddressByInput(value) {
         let addressInput = self.driver.findElement(By.id('address'));
         let nextButton = self.driver.findElement(By.id('nextButton'));
-
-        console.log('val', value);
 
         addressInput.sendKeys(value);
 
