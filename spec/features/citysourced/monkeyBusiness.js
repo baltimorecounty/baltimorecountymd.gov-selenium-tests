@@ -7,22 +7,29 @@ function monkeyBusiness(driver) {
     var self = this;
     self.driver = driver;
 
-    let nextButton = self.driver.findElement(By.id('nextButton'));
+
 
     function chooseAddressByInput(value) {
         let addressInput = self.driver.findElement(By.id('address'));
+        let nextButton = self.driver.findElement(By.id('nextButton'));
+
+        console.log('val', value);
+
         addressInput.sendKeys(value);
+
+        self.driver.sleep(1000);
 
         nextButton.click();
     }
 
     function chooseReport(category, subCategory, description) {
         let categoriesSelect = self.driver.findElement(By.id('categories'));
-        let subCategoriesSelect = self.driver.findElement(By.id('subCategories'));
         let descriptionTextArea = self.driver.findElement(By.id('description'));
+        let nextButton = self.driver.findElement(By.id('nextButton'));
+
 
         categoriesSelect.findElement(By.css('option[value="' + category + '"]')).click().then(() => {
-            subCategoriesSelect
+            self.driver.findElement(By.id('subCategories'))
                 .then((categories2) => categories2.findElement(By.css('option[value="' + subCategory + '"]')).click(), () => { });
         });
 

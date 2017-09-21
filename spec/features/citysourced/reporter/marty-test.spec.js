@@ -24,16 +24,24 @@ describe('CitySourced reporter', () => {
             driver.get(stagingUrl);
         });
 
-        it('A user can move to the third panel of the form with an invalid address', (done) => {
+        it('A user should not be able to submit an invalid address and move to the contact panel', (done) => {
             monkeyBusiness.chooseReport(constants.values.requestType, constants.values.requestSubType, constants.values.requestDescription);
 
             driver.sleep(1000);
 
             monkeyBusiness.chooseAddressByInput(constants.values.address);
 
-            driver.sleep(100000);
+            driver.sleep(10000);
 
-            done();
+            let emailTextBox = driver.findElement(By.id('email'));
+
+            driver.wait(until.elementLocated(By.id('email')), 10000).then((email) => {
+                email.isDisplayed().then((isDisplayed) => {
+                    expect(isDisplayed).to.equal(false);
+                    done();
+                });
+            });
+
         });
 
         after(function () {
