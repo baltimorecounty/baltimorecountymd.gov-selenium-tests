@@ -29,7 +29,9 @@
     "selenium-webdriver": "^3.3.0"
   },
   "devDependencies": {
-    "chai": "*",
+    "assert": "^1.4.1",
+    "babel-eslint": "^8.0.0",
+    "chai": "^4.1.2",
     "chakram": "^1.5.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^15.1.0",
@@ -38,8 +40,9 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
     "frisby": "^0.8.5",
+    "gulp-jasmine": "^2.4.2",
     "gulp-webdriver": "^2.0.3",
     "jasmine-spec-reporter": "^3.2.0",
-    "mocha": "*"
+    "mocha": "^3.5.3"
   }
 }

@@ -33,6 +33,14 @@ gulp.task('baltcogo-specific', () => {
 		}));
 });
 
+gulp.task('baltcogo-marty', () => {
+	gulp.src(['spec/features/citysourced/reporter/marty-test.spec.js'])
+		.pipe(mocha({
+			reporter: 'spec',
+			timeout: 30000
+		}));
+});
+
 gulp.task('services', () => {
 	gulp.src('spec/services/**/*.js')
 		.pipe(mocha({
