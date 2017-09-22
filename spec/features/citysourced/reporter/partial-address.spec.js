@@ -6,17 +6,17 @@ const jsonTools = require('../../../../utility/jsonTools');
 const categoryJson = require('../../../../data/categories.json');
 const By = webdriver.By;
 const until = webdriver.until;
-const stagingUrl = 'http://staging.baltimorecountymd.gov/baltcogo/reporter';
-const constants = require('../constants');
-const MonkeyBusiness = require('../monkeyBusiness');
+const stagingUrl = 'https://dev.baltimorecountymd.gov/_Test/baltcogo-location-fix.html';
+const constants = require('../constants').devValues;
+const Reporter = require('../reporter');
 let driver;
-let monkeyBusiness;
+let reporter;
 
 describe('CitySourced reporter', () => {
-    describe('Address Bug', () => {
+    describe('Should not be able to submit a partial address', () => {
         before(() => {
             driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
-            monkeyBusiness = new MonkeyBusiness(driver);
+            reporter = new Reporter(driver);
         });
 
         beforeEach(() => {
@@ -25,11 +25,11 @@ describe('CitySourced reporter', () => {
         });
 
         it('A user should not be able to submit an invalid address and move to the contact panel', (done) => {
-            monkeyBusiness.chooseReport(constants.values.requestType, constants.values.requestSubType, constants.values.requestDescription);
+            reporter.chooseReport(constants.requestType, constants.requestSubType, constants.requestDescription);
 
             driver.sleep(1000);
 
-            monkeyBusiness.chooseAddressByInput(constants.values.address);
+            reporter.chooseAddressByInput(constants.address);
 
             driver.sleep(10000);
 

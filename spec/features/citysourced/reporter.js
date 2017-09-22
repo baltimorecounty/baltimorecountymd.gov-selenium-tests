@@ -3,7 +3,7 @@ const webdriver = require('selenium-webdriver');
 const By = webdriver.By;
 const until = webdriver.until;
 
-function monkeyBusiness(driver) {
+function reporter(driver) {
     var self = this;
     self.driver = driver;
 
@@ -38,4 +38,4 @@ function monkeyBusiness(driver) {
 
 }
 
-module.exports = monkeyBusiness;
+module.exports = reporter;
