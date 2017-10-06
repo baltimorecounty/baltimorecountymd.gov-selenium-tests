@@ -6,7 +6,7 @@ const jsonTools = require('../../../../utility/jsonTools');
 const categoryJson = require('../../../../data/categories.json');
 const By = webdriver.By;
 const until = webdriver.until;
-const stagingUrl = 'https://dev.baltimorecountymd.gov/_Test/baltcogo-location-fix.html';
+const stagingUrl = 'https://dev.baltimorecountymd.gov/iwant/report.html';
 const constants = require('../constants').devValues;
 const Reporter = require('../reporter');
 let driver;
