@@ -33,7 +33,7 @@ gulp.task('baltcogo-specific', () => {
         }));
 });
 
-gulp.task('baltcogo-marty', () => {
+gulp.task('baltcogo-partial-address', () => {
     gulp.src(['spec/features/citysourced/reporter/partial-address.spec.js'])
         .pipe(mocha({
             reporter: 'spec',
