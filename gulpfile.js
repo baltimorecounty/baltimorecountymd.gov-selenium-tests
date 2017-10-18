@@ -25,6 +25,14 @@ gulp.task('baltcogo-random-all', () => {
         }));
 });
 
+gulp.task('police-online-reporting', () => {
+    gulp.src(['spec/features/police-online-reporting/reporter/*.spec.js'])
+        .pipe(mocha({
+            reporter: 'spec',
+            timeout: 30000
+        }));
+});
+
 gulp.task('baltcogo-specific', () => {
     gulp.src(['spec/features/citysourced/reporter/submit-report-specific-location.spec.js'])
         .pipe(mocha({
