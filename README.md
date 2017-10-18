@@ -15,3 +15,11 @@ This project is the collection of automation for features for the BaltimoreCount
 	
 ## Documentation
 * [selenium-webdriver api](https://seleniumhq.github.io/selenium/docs/api/javascript/index.html)
+
+## Running Test
+
+### Individually
+To run a test individual you will use mocha.
+```cli
+mocha path/to/file.js
+```
