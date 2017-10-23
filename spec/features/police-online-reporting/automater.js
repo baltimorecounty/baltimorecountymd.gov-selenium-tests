@@ -31,6 +31,7 @@ function Automater(driver) {
                 .catch(reject);
         });
     }
+    
     self.isReportButtonAvailable = () => {
         return new Promise((resolve, reject) => {
             return driver.findElements(By.xpath("//a[contains(text(), 'File a Report Now')]"))
