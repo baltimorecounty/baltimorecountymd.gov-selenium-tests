@@ -61,14 +61,11 @@ function Automater(driver) {
             let validDates = [];
 
             dates.forEach((date) => {
-                const dateParts = date.split(" ");
-                if (dateParts.length === 2) {
-                    const month = dateParts[0].trim().toLowerCase();
-                    const day = dateParts[1].trim();
-
-                    if (isValidMonth(month) && isValidDay(day)) {
-                        validDates.push(date);
-                    }
+                const fullDate = date + " " + new Date().getFullYear();
+                const isValidDate = Date.parse(fullDate);
+                
+                if (isValidDate) {
+                    validDates.push(date);
                 }
             });
 
@@ -78,33 +75,6 @@ function Automater(driver) {
             return false;
         }
     }
-
-    function isValidMonth(month) {
-        return [
-            'january',
-            'february',
-            'march',
-            'april',
-            'may',
-            'june',
-            'july',
-            'august',
-            'september',
-            'october',
-            'november',
-            'december'].includes(month.toLowerCase());
-    }
-
-    function isValidDay(dayStr) {
-        try {
-            const day = parseInt(dayStr);
-            return day > 0 && day <= 31;
-        }
-        catch (ex) {
-            return false;
-        }
-    }
-
 }
 
 module.exports = Automater;
