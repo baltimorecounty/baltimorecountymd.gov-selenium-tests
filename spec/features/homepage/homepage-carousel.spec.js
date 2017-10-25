@@ -29,7 +29,12 @@ describe('Homepage - Carousel', () => {
     });
 
     it('Should be displayed behind the search component', (done) => {
-        done();
+        automater.isCarouselBehindSearch()
+            .then((isCarouselBehindSearch) => {
+                expect(isCarouselBehindSearch).to.equal(true);
+                done();
+            })
+            .catch((err) => handleException(err, done));
     });
 
     it('Should pause rotation if the mouse is hovered over an item', (done) => {
