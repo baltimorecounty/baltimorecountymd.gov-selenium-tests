@@ -5,7 +5,7 @@ const _ = require('lodash');
 const By = webdriver.By;
 const until = webdriver.until;
 const constants = require('./constants');
-const Automater = require('./homepage.automater');
+const Automater = require('./homepage-news.automater');
 let driver;
 let automater;
 
