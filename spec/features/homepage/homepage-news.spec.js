@@ -4,39 +4,64 @@ const expect = chai.expect;
 const _ = require('lodash');
 const By = webdriver.By;
 const until = webdriver.until;
-const constants = require('constants').devValues;
-const Automater = require('homepage-automater');
+const constants = require('./constants');
+const Automater = require('./homepage.automater');
 let driver;
 let automater;
 
-describe('Homepage - News Snippets', () => {
+describe('Homepage - News Stories', () => {
+    it('Should display four news stories', (done) => {
+        automater.getStories()
+            .then((newStories) => {
+                var numberOfStories = newStories.length;
+                expect(numberOfStories).to.equal(4);
+                done();
+            })
+            .catch((err) => {
+                handleException(err, done);
+            });
+    });
+
+    it('Should display a \'Read More\' news link', (done) => {
+        automater.getReadMoreLink()
+            .then((readMoreLink) => {
+                const linkExists = readMoreLink && !!readMoreLink.length;
+                expect(linkExists).to.equal(true);
+                done();
+            })
+            .catch((err) => {
+                handleException(err, done);
+            });
+    });
+
+    it('Should display the data in the following format, {Month DayNumber} ', (done) => {
+        automater.getDatesFromStories()
+            .then((dates) => {
+                const hasValidDates = automater.validateDates(dates);
+                expect(hasValidDates).to.equal(true);
+                done();
+            })
+            .catch((err) => {
+                handleException(err, done);
+            });
+    });
+
     before(() => {
         driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
         automater = new Automater(driver);
     });
 
     beforeEach(() => {
-        driver.manage().window().setSize(1200, 1000);
         driver.get(constants.url);
     });
 
     after(function () {
         driver.quit();
     });
-
-    it('Should display four news stories', () => {
-        automater.getStories()
-            .then((newStories) => {
-                var numberOfStories = newStories.length;
-                assert(numberOfStories).to.equal(4);
-            });
-    });
-
-    it('Should display a \'Read More\' news link', () => {
-
-    });
-
-    it('Should display the data in the following format, {Month DayNumber} ', () => {
-
-    });
 });
+
+function handleException(err, done) {
+    let errName = err.name || null;
+    expect(errName).to.equal(null);
+    done();
+}
