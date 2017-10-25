@@ -17,9 +17,7 @@ describe('Homepage - News Stories', () => {
                 expect(numberOfStories).to.equal(4);
                 done();
             })
-            .catch((err) => {
-                handleException(err, done);
-            });
+            .catch((err) => handleException(err, done));
     });
 
     it('Should display a \'Read More\' news link', (done) => {
@@ -29,9 +27,7 @@ describe('Homepage - News Stories', () => {
                 expect(linkExists).to.equal(true);
                 done();
             })
-            .catch((err) => {
-                handleException(err, done);
-            });
+            .catch((err) => handleException(err, done));
     });
 
     it('Should display the data in the following format, {Month DayNumber} ', (done) => {
@@ -41,9 +37,7 @@ describe('Homepage - News Stories', () => {
                 expect(hasValidDates).to.equal(true);
                 done();
             })
-            .catch((err) => {
-                handleException(err, done);
-            });
+            .catch((err) => handleException(err, done));
     });
 
     before(() => {
