@@ -59,10 +59,6 @@ function Automater(driver) {
         });
     };
 
-    function hoverOverElm(elm) {
-        return driver.actions().mouseMove(elm).perform();
-    }
-
     self.isCarouselPaused = function (delay) {
         return new Promise((resolve, reject) => {
             return driver.findElement(By.css(carouselSelector))
@@ -80,33 +76,37 @@ function Automater(driver) {
                 })
                 .catch(reject);
         });
-};
+    };
 
-function getActiveImgSrc() {
-    return new Promise((resolve, reject) => {
-        return driver.findElement(By.css(carouselActiveItemImageSelector))
-            .then((elm) => {
-                return elm.getAttribute('src')
-                    .then(resolve)
-                    .catch(reject);
-            })
-            .catch(reject)
-    });
-}
+    function getActiveImgSrc() {
+        return new Promise((resolve, reject) => {
+            return driver.findElement(By.css(carouselActiveItemImageSelector))
+                .then((elm) => {
+                    return elm.getAttribute('src')
+                        .then(resolve)
+                        .catch(reject);
+                })
+                .catch(reject)
+        });
+    }
 
-/**
- * Returns a Promise with css value as a string?
- * @param {*} elm 
- * @param {*} prop 
- */
-function getCssValueByElement(elm, prop) {
-    return elm.getCssValue(prop);
-}
+    /**
+     * Returns a Promise with css value as a string?
+     * @param {*} elm 
+     * @param {*} prop 
+     */
+    function getCssValueByElement(elm, prop) {
+        return elm.getCssValue(prop);
+    }
 
-function getCssValueBySelector(selector, prop) {
-    return getSingleElement(selector)
-        .then((elm) => getCssValueByElement(elm, prop));
-}
+    function getCssValueBySelector(selector, prop) {
+        return getSingleElement(selector)
+            .then((elm) => getCssValueByElement(elm, prop));
+    }
+
+    function hoverOverElm(elm) {
+        return driver.actions().mouseMove(elm).perform();
+    }
 
 }
 
