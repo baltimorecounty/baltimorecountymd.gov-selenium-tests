@@ -38,7 +38,12 @@ describe('Homepage - Carousel', () => {
     });
 
     it('Should pause rotation if the mouse is hovered over an item', (done) => {
-        done();
+        automater.isCarouselPaused(10000)
+            .then((isCarouselPaused) => {
+                expect(isCarouselPaused).to.equal(true);
+                done();
+            })
+            .catch((err) => handleException(err, done));
     });
 
     before(() => {
