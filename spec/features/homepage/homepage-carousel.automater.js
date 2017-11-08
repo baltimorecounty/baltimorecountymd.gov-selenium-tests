@@ -34,14 +34,6 @@ function Automater(driver) {
         });
     };
 
-    function getSingleElement(selector) {
-        return new Promise(function (resolve, reject) {
-            return driver.findElement(By.css(selector))
-                .then(resolve)
-                .catch(reject);
-        });
-    }
-
     self.isCarouselBehindSearch = function () {
         return new Promise((resolve, reject) => {
             return getCssValueBySelector(carouselSelector, 'z-index')
@@ -102,6 +94,14 @@ function Automater(driver) {
     function getCssValueBySelector(selector, prop) {
         return getSingleElement(selector)
             .then((elm) => getCssValueByElement(elm, prop));
+    }
+
+    function getSingleElement(selector) {
+        return new Promise(function (resolve, reject) {
+            return driver.findElement(By.css(selector))
+                .then(resolve)
+                .catch(reject);
+        });
     }
 
     function hoverOverElm(elm) {
