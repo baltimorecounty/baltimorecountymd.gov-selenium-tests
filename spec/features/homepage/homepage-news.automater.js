@@ -1,80 +1,85 @@
 const webdriver = require('selenium-webdriver');
+
 const By = webdriver.By;
-const until = webdriver.until;
+class Automater {
 
-function Automater(driver) {
-    var self = this;
-    self.driver = driver;
 
-    const newStoriesSelector = '.news-feed .SESyndicationModule .feedItems li';
-    const newStoriesDateSelector = newStoriesSelector + ' .pub-date';
+	constructor(options) {
+		const invalidConfigWarning = (msg) => {
+			console.error(msg); // eslint-disable-line no-console
+		};
 
-    function getDateTextSync(objects, callback) {
-        var cntr = 0;
-        let dates = [];
+		this.driver = options.driver || invalidConfigWarning('please provide a driver');
+		this.newStoriesSelector = options.newStoriesSelector || invalidConfigWarning('please provide a selector for new stories, this should be a selector that identifies a specific news story in the feed.');
+		this.newStoriesDateSelector = options.newStoriesDateSelector || invalidConfigWarning('please provide a selector for new story date, this should the newstory and then find the date inside of that.');
+		this.readMoreSelector = options.readMoreSelector || invalidConfigWarning('please provide a selector for the read more news button');
+	}
 
-        function next() {
-            if (cntr < objects.length) {
-                objects[cntr++].getText()
-                    .then((date) => {
-                        dates.push(date);
-                        next();
-                    });
-            }
-            else {
-                callback(dates);
-            }
-        }
-        next();
-    }
-
-    self.getReadMoreLink = function () {
-        return new Promise(function (resolve, reject) {
-            return driver.findElements(By.css('.news-feed-read-more'))
+	getReadMoreLink() {
+		const self = this;
+		return new Promise((resolve, reject) =>
+			self.driver.findElements(By.css(this.readMoreSelector))
                 .then(resolve)
-                .catch(reject);
-        });
-    };
+                .catch(reject));
+	}
 
-    self.getStories = function () {
-        return new Promise(function (resolve, reject) {
-            return driver.findElements(By.css(newStoriesSelector))
+	getStories() {
+		const self = this;
+		return new Promise((resolve, reject) =>
+			self.driver.findElements(By.css(this.newStoriesSelector))
                 .then(resolve)
-                .catch(reject);
-        });
-    };
+                .catch(reject));
+	}
 
-    self.getDatesFromStories = function () {
-        return new Promise(function (resolve, reject) {
-            return driver.findElements(By.css(newStoriesDateSelector))
-                .then((dateElms) => {
-                    getDateTextSync(dateElms, (dates) => {
-                        resolve(dates);
-                    })
-                })
-                .catch(reject);
-        });
-    }
+	getDatesFromStories() {
+		const self = this;
+		return new Promise((resolve, reject) =>
+			self.driver.findElements(By.css(this.newStoriesDateSelector))
+				.then((dateElms) => {
+					Automater.getDateTextSync(dateElms, (dates) => {
+						resolve(dates);
+					});
+				})
+				.catch(reject));
+	}
 
-    self.validateDates = function (dates) {
-        try {
-            let validDates = [];
+	static getDateTextSync(objects, callback) {
+		let cntr = 0;
+		const dates = [];
 
-            dates.forEach((date) => {
-                const fullDate = date + " " + new Date().getFullYear();
-                const isValidDate = Date.parse(fullDate);
-                
-                if (isValidDate) {
-                    validDates.push(date);
-                }
-            });
+		const next = () => {
+			if (cntr < objects.length) {
+				cntr += 1;
+				objects[cntr].getText().then((date) => {
+					dates.push(date);
+					next();
+				});
+			} else {
+				callback(dates);
+			}
+		};
+		next();
+	}
 
-            return dates.length === validDates.length;
-        }
-        catch (ex) {
-            return false;
-        }
-    }
+	// TODO: this should probably be static
+	validateDates(dates) { // eslint-disable-line class-methods-use-this
+		try {
+			const validDates = [];
+
+			dates.forEach((date) => {
+				const fullDate = `${date} ${new Date().getFullYear()}`;
+				const isValidDate = Date.parse(fullDate);
+
+				if (isValidDate) {
+					validDates.push(date);
+				}
+			});
+
+			return dates.length === validDates.length;
+		} catch (ex) {
+			return false;
+		}
+	}
 }
 
 module.exports = Automater;

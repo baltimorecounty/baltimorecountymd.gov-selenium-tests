@@ -1,61 +1,79 @@
+/* eslint-env mocha */
 const webdriver = require('selenium-webdriver');
 const chai = require('chai');
-const expect = chai.expect;
-const _ = require('lodash');
-const By = webdriver.By;
-const until = webdriver.until;
 const constants = require('./constants');
 const Automater = require('./homepage-news.automater');
+
+const expect = chai.expect;
+
 let driver;
 let automater;
 
+// Configuration for the Tests
+const newStoriesSelector = '.news-feed .SESyndicationModule .feedItems li';
+const newStoriesDateSelector = `${newStoriesSelector} .pub-date`;
+const readMoreSelector = '.news-feed-read-more';
+
 describe('Homepage - News Stories', () => {
-    it('Should display four news stories', (done) => {
-        automater.getStories()
-            .then((newStories) => {
-                var numberOfStories = newStories.length;
-                expect(numberOfStories).to.equal(4);
-                done();
-            })
-            .catch((err) => handleException(err, done));
-    });
+	it('Should display four news stories', (done) => {
+		automater
+			.getStories()
+			.then((newStories) => {
+				const numberOfStories = newStories.length;
+				expect(numberOfStories).to.equal(4);
+				done();
+			})
+			.catch(err => handleException(err, done));
+	});
 
-    it('Should display a \'Read More\' news link', (done) => {
-        automater.getReadMoreLink()
-            .then((readMoreLink) => {
-                const linkExists = readMoreLink && !!readMoreLink.length;
-                expect(linkExists).to.equal(true);
-                done();
-            })
-            .catch((err) => handleException(err, done));
-    });
+	it("Should display a 'Read More' news link", (done) => {
+		automater
+			.getReadMoreLink()
+				.then((readMoreLink) => {
+					const linkExists = readMoreLink && !!readMoreLink.length;
+					expect(linkExists).to.equal(true);
+					done();
+				})
+				.catch(err => handleException(err, done));
+	});
 
-    it('Should display the data in the following format, {Month DayNumber} ', (done) => {
-        automater.getDatesFromStories()
-            .then((dates) => {
-                const hasValidDates = automater.validateDates(dates);
-                expect(hasValidDates).to.equal(true);
-                done();
-            })
-            .catch((err) => handleException(err, done));
-    });
+	it('Should display the data in the following format, {Month DayNumber} ', (done) => {
+		automater
+			.getDatesFromStories()
+				.then((dates) => {
+					const hasValidDates = automater.validateDates(dates);
+					expect(hasValidDates).to.equal(true);
+					done();
+				})
+				.catch(err => handleException(err, done));
+	});
 
-    before(() => {
-        driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
-        automater = new Automater(driver);
-    });
+	before(() => {
+		driver = new webdriver.Builder()
+			.withCapabilities(webdriver.Capabilities.chrome())
+			.build();
 
-    beforeEach(() => {
-        driver.get(constants.url);
-    });
+		const testConfig = {
+			driver,
+			newStoriesSelector,
+			newStoriesDateSelector,
+			readMoreSelector,
+		};
 
-    after(function () {
-        driver.quit();
-    });
+		automater = new Automater(testConfig);
+	});
+
+	beforeEach(() => {
+		driver.get(constants.url);
+	});
+
+	after(() => {
+		driver.quit();
+	});
 });
 
 function handleException(err, done) {
-    let errName = err.name || null;
-    expect(errName).to.equal(null);
-    done();
+	const errName = err.name || null;
+	expect(errName).to.equal(null);
+	done();
 }
