@@ -15,6 +15,18 @@ class Automater {
 		this.readMoreSelector = options.readMoreSelector || invalidConfigWarning('please provide a selector for the read more news button');
 	}
 
+	getDatesFromStories() {
+		const self = this;
+		return new Promise((resolve, reject) =>
+			self.driver.findElements(By.css(this.newStoriesDateSelector))
+				.then((dateElms) => {
+					Automater.getDateTextSync(dateElms, (dates) => {
+						resolve(dates);
+					});
+				})
+				.catch(reject));
+	}
+
 	getReadMoreLink() {
 		const self = this;
 		return new Promise((resolve, reject) =>
@@ -29,36 +41,6 @@ class Automater {
 			self.driver.findElements(By.css(this.newStoriesSelector))
                 .then(resolve)
                 .catch(reject));
-	}
-
-	getDatesFromStories() {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.driver.findElements(By.css(this.newStoriesDateSelector))
-				.then((dateElms) => {
-					Automater.getDateTextSync(dateElms, (dates) => {
-						resolve(dates);
-					});
-				})
-				.catch(reject));
-	}
-
-	static getDateTextSync(objects, callback) {
-		let cntr = 0;
-		const dates = [];
-
-		const next = () => {
-			if (cntr < objects.length) {
-				cntr += 1;
-				objects[cntr].getText().then((date) => {
-					dates.push(date);
-					next();
-				});
-			} else {
-				callback(dates);
-			}
-		};
-		next();
 	}
 
 	// TODO: this should probably be static
@@ -79,6 +61,25 @@ class Automater {
 		} catch (ex) {
 			return false;
 		}
+	}
+
+	static getDateTextSync(objects, callback) {
+		let cntr = 0;
+		const dates = [];
+
+		const next = () => {
+			if (cntr < objects.length) {
+				objects[cntr++] // eslint-disable-line no-plusplus
+					.getText()
+						.then((date) => {
+							dates.push(date);
+							next();
+						});
+			} else {
+				callback(dates);
+			}
+		};
+		next();
 	}
 }
 
