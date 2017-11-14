@@ -4,7 +4,6 @@ const By = webdriver.By;
 
 
 class Automater {
-
 	constructor(options) {
 		const handleError = (msg) => {
 			console.error(msg); // eslint-disable-line no-console
