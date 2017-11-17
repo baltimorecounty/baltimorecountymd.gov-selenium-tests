@@ -2,106 +2,110 @@ const webdriver = require('selenium-webdriver');
 
 const By = webdriver.By;
 
+function Automater(driver) {
+	const self = this;
+	self.driver = driver;
 
-class Automater {
-	constructor(options) {
-		const handleError = (msg) => {
-			console.error(msg); // eslint-disable-line no-console
-		};
+	const carouselItemSelector = '.carousel .carousel-item';
+	const carouselActiveItemImageSelector = `${carouselItemSelector}.slick-active img`;
+	const carouselSelector = '.carousel';
+	const searchControlSelector = '#search-container';
 
-		this.driver = options.driver || handleError('');
-		this.carouselItemSelector = options.carouselItemSelector || handleError('');
-		this.carouselActiveItemImageSelector = options.carouselActiveItemImageSelector || handleError('');
-		this.carouselSelector = options.carouselSelector || handleError('');
-		this.searchControlSelector = options.searchControlSelector || handleError('');
-	}
-
-	checkForRotation(rotationInterval) {
-		const self = this;
-		return new Promise((resolve, reject) => self.getActiveImgSrc(self)
-			.then((src) => {
-				setTimeout(() => self.getActiveImgSrc(self)
-					.then((newSrc) => {
-						const isRotating = src !== newSrc;
-						resolve(isRotating);
-					}), rotationInterval);
-			})
-			.catch(reject));
-	}
-
-	// eslint-disable-next-line class-methods-use-this
-	getActiveImgSrc(automater) {
+	/**
+	 *  Public Methods
+	 */
+	function checkForRotation(rotationInterval) {
 		return new Promise((resolve, reject) =>
-			automater.driver.findElement(By.css(automater.carouselActiveItemImageSelector))
-				.then(elm => elm.getAttribute('src')
-					.then(resolve)
-					.catch(reject))
-			.catch(reject));
-	}
-
-	static getCssValueByElement(elm, prop) {
-		return elm.getCssValue(prop);
-	}
-
-	getCssValueBySelector(selector, prop) {
-		const self = this;
-		return self.getSingleElement(selector)
-			.then(elm => Automater.getCssValueByElement(elm, prop));
-	}
-
-	getItems() {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.driver.findElements(By.css(self.carouselItemSelector))
-				.then(resolve)
-				.catch(reject));
-	}
-
-	getSingleElement(selector) {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.driver.findElement(By.css(selector))
-				.then(resolve)
-				.catch(reject));
-	}
-
-	static hoverOverElm(elm, automater) {
-		return automater.driver.actions().mouseMove(elm).perform();
-	}
-
-	isCarouselBehindSearch() {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.getCssValueBySelector(self.carouselSelector, 'z-index')
-				.then((carouselZIndex) => {
-					const carouselZIndexValue = carouselZIndex === 'auto' ? 0 : carouselZIndex;
-					return self.getCssValueBySelector(self.searchControlSelector, 'z-index')
-						.then((searchControlZIndex) => {
-							const isCarouselBehindSearch = carouselZIndexValue < searchControlZIndex;
-							resolve(isCarouselBehindSearch);
-						})
-						.catch(reject);
+			getActiveImgSrc()
+				.then((src) => {
+					setTimeout(() =>
+						getActiveImgSrc().then((newSrc) => {
+							const isRotating = src !== newSrc;
+							resolve(isRotating);
+						}), rotationInterval);
 				})
 				.catch(reject));
 	}
 
-	isCarouselPaused(delay) {
-		const self = this;
+	function getItems() {
 		return new Promise((resolve, reject) =>
-			self.driver.findElement(By.css(self.carouselSelector))
-				.then(elm => Automater.hoverOverElm(elm, self)
-						.then(() => self.getActiveImgSrc(self)
-								.then((src) => {
-									setTimeout(() =>
-										self.getActiveImgSrc(self)
-											.then((newSrc) => {
-												const isCarouselPaused = src === newSrc;
-												resolve(isCarouselPaused);
-											})
-											.catch(reject), delay);
-								})))
+			driver.findElements(By.css(carouselItemSelector))
+                .then(resolve)
+                .catch(reject));
+	}
+
+	function isCarouselBehindSearch() {
+		return new Promise((resolve, reject) =>
+			getCssValueBySelector(carouselSelector, 'z-index')
+				.then(carouselZIndex =>
+					getCssValueBySelector(searchControlSelector, 'z-index')
+						.then((searchControlZIndex) => {
+							const carouselZIndexValue = carouselZIndex === 'auto' ? 0 : carouselZIndex;
+							const searchZIndexValue = searchControlZIndex === 'auto' ? 0 : searchControlZIndex;
+							const isBehind = carouselZIndexValue < searchZIndexValue;
+							resolve(isBehind);
+						})
+						.catch(reject))
 				.catch(reject));
 	}
+
+	function isCarouselPaused(delay) {
+		return new Promise((resolve, reject) =>
+			driver.findElement(By.css(carouselSelector))
+				.then(hoverOverElm)
+                .then(getActiveImgSrc)
+                .then(src => compareImgSrc(src, delay, resolve))
+				.catch(reject));
+	}
+
+	/**
+	 *  Private Methods
+	 */
+	function compareImgSrc(src, delay, callback) {
+		setTimeout(() =>
+			getActiveImgSrc()
+				.then((newSrc) => {
+					const isPaused = src === newSrc;
+					callback(isPaused);
+				}), delay);
+	}
+
+	function getActiveImgSrc() {
+		return new Promise((resolve, reject) =>
+			driver.findElement(By.css(carouselActiveItemImageSelector))
+                .then(elm => elm.getAttribute('src')
+                        .then(resolve)
+                        .catch(reject))
+                .catch(reject));
+	}
+
+	function getCssValueByElement(elm, prop) {
+		return elm.getCssValue(prop);
+	}
+
+	function getCssValueBySelector(selector, prop) {
+		return getSingleElement(selector)
+            .then(elm => getCssValueByElement(elm, prop));
+	}
+
+	function getSingleElement(selector) {
+		return new Promise((resolve, reject) =>
+			driver.findElement(By.css(selector))
+                .then(resolve)
+                .catch(reject));
+	}
+
+	function hoverOverElm(elm) {
+		return driver.actions().mouseMove(elm).perform();
+	}
+
+	/**
+	 * Export Public methods
+	 */
+	self.checkForRotation = checkForRotation;
+	self.getItems = getItems;
+	self.isCarouselBehindSearch = isCarouselBehindSearch;
+	self.isCarouselPaused = isCarouselPaused;
 }
 
 module.exports = Automater;

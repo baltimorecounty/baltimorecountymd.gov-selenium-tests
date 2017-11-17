@@ -53,16 +53,7 @@ describe('Homepage - Carousel', () => {
 
 	before(() => {
 		driver = new webdriver.Builder().withCapabilities(webdriver.Capabilities.chrome()).build();
-
-		const testConfig = {
-			driver,
-			carouselItemSelector,
-			carouselActiveItemImageSelector,
-			carouselSelector,
-			searchControlSelector,
-		};
-
-		automater = new Automater(testConfig);
+		automater = new Automater(driver);
 	});
 
 	beforeEach(() => {
