@@ -1,50 +1,39 @@
 const webdriver = require('selenium-webdriver');
 
 const By = webdriver.By;
-class Automater {
+
+function Automater(driver) {
+	const self = this;
+
+	const newStoriesSelector = '.news-feed .SESyndicationModule .feedItems li';
+	const newStoriesDateSelector = `${newStoriesSelector} .pub-date`;
 
 
-	constructor(options) {
-		const invalidConfigWarning = (msg) => {
-			console.error(msg); // eslint-disable-line no-console
-		};
-
-		this.driver = options.driver || invalidConfigWarning('please provide a driver');
-		this.newStoriesSelector = options.newStoriesSelector || invalidConfigWarning('please provide a selector for new stories, this should be a selector that identifies a specific news story in the feed.');
-		this.newStoriesDateSelector = options.newStoriesDateSelector || invalidConfigWarning('please provide a selector for new story date, this should the newstory and then find the date inside of that.');
-		this.readMoreSelector = options.readMoreSelector || invalidConfigWarning('please provide a selector for the read more news button');
+	/**
+	 *  Public Methods
+	 */
+	function getReadMoreLink() {
+		return new Promise((resolve, reject) =>
+			driver.findElements(By.css('.news-feed-read-more'))
+                .then(resolve)
+                .catch(reject));
 	}
 
-	getDatesFromStories() {
-		const self = this;
+	function getStories() {
 		return new Promise((resolve, reject) =>
-			self.driver.findElements(By.css(this.newStoriesDateSelector))
-				.then((dateElms) => {
-					Automater.getDateTextSync(dateElms, (dates) => {
-						resolve(dates);
-					});
-				})
+			driver.findElements(By.css(newStoriesSelector))
+                .then(resolve)
+                .catch(reject));
+	}
+
+	function getDatesFromStories() {
+		return new Promise((resolve, reject) =>
+			driver.findElements(By.css(newStoriesDateSelector))
+                .then(dateElms => getDateTextSync(dateElms, resolve))
 				.catch(reject));
 	}
 
-	getReadMoreLink() {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.driver.findElements(By.css(this.readMoreSelector))
-                .then(resolve)
-                .catch(reject));
-	}
-
-	getStories() {
-		const self = this;
-		return new Promise((resolve, reject) =>
-			self.driver.findElements(By.css(this.newStoriesSelector))
-                .then(resolve)
-                .catch(reject));
-	}
-
-	// TODO: this should probably be static
-	validateDates(dates) { // eslint-disable-line class-methods-use-this
+	function validateDates(dates) {
 		try {
 			const validDates = [];
 
@@ -56,18 +45,19 @@ class Automater {
 					validDates.push(date);
 				}
 			});
-
 			return dates.length === validDates.length;
 		} catch (ex) {
 			return false;
 		}
 	}
-
-	static getDateTextSync(objects, callback) {
+	/**
+	 *  Private Methods
+	 */
+	function getDateTextSync(objects, callback) {
 		let cntr = 0;
 		const dates = [];
 
-		const next = () => {
+		function next() {
 			if (cntr < objects.length) {
 				objects[cntr++] // eslint-disable-line no-plusplus
 					.getText()
@@ -78,9 +68,17 @@ class Automater {
 			} else {
 				callback(dates);
 			}
-		};
+		}
 		next();
 	}
+
+	/**
+	 * Export Public methods
+	 */
+	self.getReadMoreLink = getReadMoreLink;
+	self.getStories = getStories;
+	self.getDatesFromStories = getDatesFromStories;
+	self.validateDates = validateDates;
 }
 
 module.exports = Automater;
