@@ -9,15 +9,9 @@ const expect = chai.expect;
 let driver;
 let automater;
 
-// Configuration for the Tests
-const newStoriesSelector = '.news-feed .SESyndicationModule .feedItems li';
-const newStoriesDateSelector = `${newStoriesSelector} .pub-date`;
-const readMoreSelector = '.news-feed-read-more';
-
 describe('Homepage - News Stories', () => {
 	it('Should display four news stories', (done) => {
-		automater
-			.getStories()
+		automater.getStories()
 			.then((newStories) => {
 				const numberOfStories = newStories.length;
 				expect(numberOfStories).to.equal(4);
