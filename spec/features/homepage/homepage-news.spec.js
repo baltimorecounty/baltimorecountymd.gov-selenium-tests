@@ -53,14 +53,7 @@ describe('Homepage - News Stories', () => {
 			.withCapabilities(webdriver.Capabilities.chrome())
 			.build();
 
-		const testConfig = {
-			driver,
-			newStoriesSelector,
-			newStoriesDateSelector,
-			readMoreSelector,
-		};
-
-		automater = new Automater(testConfig);
+		automater = new Automater(driver);
 	});
 
 	beforeEach(() => {
