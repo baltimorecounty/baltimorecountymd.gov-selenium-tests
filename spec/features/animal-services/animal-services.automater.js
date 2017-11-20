@@ -55,7 +55,8 @@ function Automater(driver) {
 	}
 
 	function getAnimalSelector(petStatus, type) {
-		if (petStatus.toLowerCase().indexOf('adopt') > -1) {
+		const isAdoptedOrRescued = petStatus.toLowerCase().indexOf('adopt') > -1 || petStatus.toLowerCase().indexOf('rescued') > -1;
+		if (isAdoptedOrRescued) {
 			if (type === 'dog') {
 				return "//span[contains(text(), 'Dog')]";
 			}
@@ -84,6 +85,7 @@ function Automater(driver) {
 			const selector = getAnimalSelector(status, type);
 			return By.xpath(selector);
 		}
+		console.log('got here');
 		return By.css(listSelector);
 	}
 

@@ -9,7 +9,11 @@ const expect = chai.expect;
 let driver;
 let automater;
 
-const pagesToTest = [constants.urls.adoptAPet, constants.urls.lostPets, constants.urls.rescuedPets];
+const pagesToTest = [
+	constants.urls.adoptAPet,
+	constants.urls.lostPets,
+	constants.urls.rescuedPets,
+];
 
 pagesToTest.forEach((pageInfo) => {
 	describe(`Animal Services - ${pageInfo.name}`, () => {
