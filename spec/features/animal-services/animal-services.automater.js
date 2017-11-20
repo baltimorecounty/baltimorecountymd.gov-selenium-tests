@@ -2,8 +2,6 @@ const webdriver = require('selenium-webdriver');
 
 const By = webdriver.By;
 
-// //a[contains(text(), 'About Google')]
-
 const listSelector = '.list-container .pet';
 
 function Automater(driver) {

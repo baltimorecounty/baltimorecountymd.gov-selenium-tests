@@ -8,6 +8,10 @@ const constants = {
 			name: 'Lost Pets',
 			url: 'https://www.baltimorecountymd.gov/Agencies/animalservices/lost.html',
 		},
+		rescuedPets: {
+			name: 'Rescued Pets',
+			url: 'https://www.baltimorecountymd.gov/Agencies/animalservices/rescue-partners.html'
+		}
 	},
 };
 
