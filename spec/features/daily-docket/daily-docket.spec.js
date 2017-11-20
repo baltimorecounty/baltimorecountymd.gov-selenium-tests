@@ -13,13 +13,18 @@ describe('Daily Docket', () => {
 		expect(doesTableExist).to.be.eq(true);
 	});
 
-	it('Should show at least 1 event in a table', async () => {
+	it('Should show at least 1 event in the events table', async () => {
 		const numberOfRows = await automater.getNumberOfDocketRows();
 		expect(numberOfRows).to.be.gte(1);
 	});
 
-	it('Should show filter records', async () => {
+	it('Should filter records based on the text inputed in the filter', async () => {
 		const docketDoesFilter = await automater.docketDoesFilter();
+		expect(docketDoesFilter).to.be.eq(true);
+	});
+
+	it('Should display a friendly message when the filter returns no results', async () => {
+		const docketDoesFilter = await automater.doesHandleNoResults();
 		expect(docketDoesFilter).to.be.eq(true);
 	});
 

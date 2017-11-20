@@ -12,9 +12,11 @@ const Automater = function (options) {
 	let browser;
 	let page;
 
+	const docketTableSelector = '#BACO_table.docket';
 	const rowSelector = '#BACO_table tr';
 	const inputSelector = '.bc-filter-form-filter';
 	const filterRowSelector = `${rowSelector}:not([style*="display:none"]):not([style*="display: none"])`;
+	const filterNoResultsSelector = '.bc-filter-noResults:not([style="display: none"])';
 
 	/**
 	 * Public Methods
@@ -24,8 +26,7 @@ const Automater = function (options) {
 		const originalNumberOfEvents = await getNumberOfEvents(rowSelector);
 	
 		// Add a filter that will most likely return results
-		const inputHandle = await page.$(inputSelector);
-		await inputHandle.type('er');
+		await type(inputSelector, 'er');
 
 		//Give the page a chance to filter
 		await page.waitFor(250);
@@ -36,8 +37,22 @@ const Automater = function (options) {
 		return filteredNumberOfEvents < originalNumberOfEvents;
 	}
 
+	async function doesHandleNoResults() {
+		// Add a filter that will most likely return results
+		await type(inputSelector, 'erzzzz')
+		
+		//Give the page a chance to filter
+		await page.waitFor(250);
+
+		// Get the number of results after the filter
+		const filteredNumberOfEvents = await getNumberOfEvents(filterRowSelector);
+		const noResultsMessage = await page.$$eval(filterNoResultsSelector, msg => msg.length);
+
+		return filteredNumberOfEvents === 0 && noResultsMessage === 1;
+	} 
+
 	async function doesEventsTableExist() {
-		const doesTableExist = await page.$$eval('#BACO_table.docket', table => table.length);
+		const doesTableExist = await page.$$eval(docketTableSelector, table => table.length);
 		return doesTableExist === 1;
 	}
 
@@ -48,6 +63,11 @@ const Automater = function (options) {
 	/**
 	 * Private Methods
 	 */
+	async function type(sel, keys) {
+		const inputHandle = await page.$(sel);
+		await inputHandle.type(keys);
+	}
+
 	async function getNumberOfEvents(selector) {
 		return await page.$$eval(selector, rows => rows.length);
 	}
@@ -69,6 +89,7 @@ const Automater = function (options) {
 	 * Export Public Methods
 	 */
 	self.docketDoesFilter = docketDoesFilter;
+	self.doesHandleNoResults = doesHandleNoResults;
 	self.doesEventsTableExist = doesEventsTableExist;
 	self.getNumberOfDocketRows = getNumberOfDocketRows;
 
