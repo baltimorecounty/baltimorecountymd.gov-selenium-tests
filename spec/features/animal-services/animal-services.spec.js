@@ -16,40 +16,24 @@ const pagesToTest = [
 ];
 
 pagesToTest.forEach((pageInfo) => {
+	
 	describe(`Animal Services - ${pageInfo.name}`, () => {
-		it('Should display a list of all animals', (done) => {
-			setTimeout(() => {
-				automater.getList()
-					.then((list) => {
-						const listIsNotNull = list && list.length > 0;
-						expect(listIsNotNull).to.equal(true);
-						done();
-					})
-					.catch(err => handleException(err, done));
-			}, 2500);
+		it('Should display a list of all animals', async () => {
+			const list = await automater.getList();
+			const listIsNotNull = list && list.length > 0;
+			expect(listIsNotNull).to.equal(true);
 		});
 
-		it('Should display a list of only cats when the "Cat" tab is selected', (done) => {
-			setTimeout(() => {
-				automater.getList(pageInfo.name, 'cat')
-				.then((list) => {
-					const listIsNotNull = list && list.length > 0;
-					expect(listIsNotNull).to.equal(true);
-					done();
-				})
-				.catch(err => handleException(err, done));
-			}, 2500);
+		it('Should display a list of only cats when the "Cat" tab is selected', async () => {
+			const list = await automater.getList(pageInfo.name, 'cat');
+			const listIsNotNull = list && list.length > 0;
+			expect(listIsNotNull).to.equal(true);
 		});
 
-		it('Should display a list of only dogs when the "Dog" tab is selected', (done) => {
-			setTimeout(() => {
-				automater.getList(pageInfo.name, 'dog')
-				.then((list) => {
-					const listIsNotNull = list && list.length > 0;
-					expect(listIsNotNull).to.equal(true);
-					done();
-				}).catch(err => handleException(err, done));
-			}, 2500);
+		it('Should display a list of only dogs when the "Dog" tab is selected', async () => {
+			const list = await automater.getList(pageInfo.name, 'dog');
+			const listIsNotNull = list && list.length > 0;
+			expect(listIsNotNull).to.equal(true);
 		});
 
 		before(() => {

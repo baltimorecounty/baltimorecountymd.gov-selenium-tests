@@ -11,27 +11,14 @@ function Automater(driver) {
 	/**
 	 * Public Methods
 	 */
-	function getList(petStatus, petType) {
+	async function getList(petStatus, petType) {
 		const bySelector = getListSelector(petStatus, petType);
-		return new Promise((resolve, reject) => {
-			if (petType) {
-				return clickTab(buildTabSelector(petStatus, petType))
-					.then(() => {
-						setTimeout(() => {
-							getListElms(bySelector)
-								.then((elms) => {
-									resolve(elms);
-								})
-								.catch(reject);
-						}, 2500);
-					})
-					.catch(reject);
-			}
 
-			return getListElms(bySelector)
-				.then(resolve)
-				.catch(reject);
-		});
+		if (petType) {
+			const initialClick = await clickTab(buildTabSelector(petStatus, petType));
+		}
+
+		return await getListElms(bySelector);
 	}
 
 	/**
@@ -44,14 +31,9 @@ function Automater(driver) {
 		return `.blog-tabs .lost-${type}`;
 	}
 
-	function clickTab(targetTab) {
-		return new Promise((resolve, reject) =>
-			driver.findElement(By.css(targetTab))
-				.then((elm) => {
-					elm.click()
-						.then(resolve)
-						.catch(reject);
-				}));
+	async function clickTab(targetTab) {
+		const elm = await driver.findElement(By.css(targetTab));
+		return await elm.click();
 	}
 
 	function getAnimalSelector(petStatus, type) {
@@ -68,14 +50,9 @@ function Automater(driver) {
 		return "//p[contains(text(), 'Cat')]";
 	}
 
-	function getListElms(bySelector) {
-		return new Promise((resolve, reject) => {
-			driver.findElements(bySelector)
-				.then((list) => {
-					resolve(list);
-				})
-				.catch(reject);
-		});
+	async function getListElms(bySelector) {
+		const listElms = await driver.findElements(bySelector);
+		return listElms;
 	}
 
 	function getListSelector(status, type) {
@@ -85,7 +62,6 @@ function Automater(driver) {
 			const selector = getAnimalSelector(status, type);
 			return By.xpath(selector);
 		}
-		console.log('got here');
 		return By.css(listSelector);
 	}
 
