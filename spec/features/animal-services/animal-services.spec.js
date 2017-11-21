@@ -16,6 +16,7 @@ const pagesToTest = [
 ];
 
 pagesToTest.forEach((pageInfo) => {
+	
 	describe(`Animal Services - ${pageInfo.name}`, () => {
 		it('Should display a list of all animals', async () => {
 			const list = await automater.getList();
