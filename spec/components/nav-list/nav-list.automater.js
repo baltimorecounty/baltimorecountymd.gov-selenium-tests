@@ -67,6 +67,33 @@ const helpers = (state) => {
 		return await checkNavPanelStatus(statuses.COLLAPSED, state.options.expandButtonSelector);
 	};
 
+	
+
+	const doesNavShowRightCaretWhenCollapsed = async () => {
+		const expandButton = await state.driver.findElements(By.css(state.options.expandButtonSelector));
+		if (expandButton && expandButton.length) {
+			const expandButtonClasses = await expandButton[0].getAttribute('class');
+			return expandButtonClasses.toLowerCase().indexOf("active") === -1;
+		}
+		return false;
+	};
+
+	const doesNavShowDownCaretWhenExpanded = async () => {
+		const expandButton = await state.driver.findElements(By.css(state.options.expandButtonSelector));
+		if (expandButton && expandButton.length) {
+			const expandButtonElm = expandButton[0];
+			let expandButtonClasses = await expandButtonElm.getAttribute('class');
+			let isExpanded = expandButtonClasses.toLowerCase().indexOf("active") > -1;
+
+			if (!isExpanded) {
+				expandButtonClasses = await expandButtonElm.getAttribute('class');
+				isExpanded = expandButtonClasses.toLowerCase().indexOf("active") > -1;
+				return isExpanded;
+			}
+		}
+		return false;
+	};
+
 	/**
 	 * Export public methods
 	 */
@@ -74,6 +101,8 @@ const helpers = (state) => {
 		isActivePageHighlighted,
 		doesNavCollapse,
 		doesNavExpand,
+		doesNavShowRightCaretWhenCollapsed,
+		doesNavShowDownCaretWhenExpanded,
 	};
 };
 

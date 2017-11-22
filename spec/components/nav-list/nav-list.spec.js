@@ -8,6 +8,7 @@ const expect = chai.expect;
 let automater;
 
 let automaterOptions = {
+
 	activePageNavItem: '.nav-list .collapse.in a.current',
 	expandButtonSelector: 'button.accordion-collapsed:not(.active)',
 	collapseButtonSelector: 'button.accordion-collapsed.active',
@@ -30,15 +31,15 @@ describe(`Nav List Component`, () => {
 		expect(didCollapse).to.be.eq(true);
 	});
 
-	// it(`Should display an caret that points down when the nav section is expanded`, async () => {
-	// 	const isCaretPointingDown = true;
-	// 	expect(isCaretPointingDown).to.be.eq(true);
-	// });
+	it(`Should display an caret that points down when the nav section is expanded`, async () => {
+		const isCaretPointingDown = await automater.doesNavShowDownCaretWhenExpanded();
+		expect(isCaretPointingDown).to.be.eq(true);
+	});
 
-	// it(`Should display an caret that points to the right when the nav section is collapsed`, async () => {
-	// 	const isCaretPointingRight = true;
-	// 	expect(isCaretPointingRight).to.be.eq(true);
-	// });
+	it(`Should display an caret that points to the right when the nav section is collapsed`, async () => {
+		const isCaretPointingRight = await automater.doesNavShowRightCaretWhenCollapsed();
+		expect(isCaretPointingRight).to.be.eq(true);
+	});
 
 	before(() => {
 		automater = NavListAutomater(automaterOptions);
