@@ -21,6 +21,7 @@
   "dependencies": {
     "assert": "^1.4.1",
     "chai-as-promised": "^7.1.1",
+    "date-fns": "^1.29.0",
     "flat": "^2.0.1",
     "gulp": "^3.9.1",
     "gulp-jasmine": "^2.4.2",
