@@ -8,11 +8,10 @@ const expect = chai.expect;
 let automater;
 
 let automaterOptions = {
-
 	activePageNavItem: '.nav-list .collapse.in a.current',
 	expandButtonSelector: 'button.accordion-collapsed:not(.active)',
 	collapseButtonSelector: 'button.accordion-collapsed.active',
-	panelIsOpen: '.collapse.in'
+	panelIsOpen: '.collapse.in',
 };
 	
 describe(`Nav List Component`, () => {
