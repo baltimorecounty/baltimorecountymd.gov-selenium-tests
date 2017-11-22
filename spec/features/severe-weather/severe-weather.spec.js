@@ -8,12 +8,23 @@ const expect = chai.expect;
 let automater;
 
 let automaterOptions = {
+	generalStatusSelector: '.county-closings-status-container p',
 	tableRowSelector: '#county-closings tbody tr',
 	tableSelector: '#county-closings',
 };
 	
 describe(`Severe Weather`, () => {
-	it('Should display a list of all animals', async () => {
+	it(`Should show a general government status message with a valid status`, async () => {
+		const messageExists = await automater.isGeneralStatusValid();
+		expect(messageExists).to.be.eq(true);
+	});
+
+	it(`Should show a status date for today, ${new Date().toLocaleDateString()}`, async () => {
+		const dateMatchesTodaysDate = await automater.isGeneralStatusDateValid();
+		expect(dateMatchesTodaysDate).to.be.eq(true);
+	});
+
+	it('Should display a table with closings', async () => {
 		try {
 			const tableElm = await automater.getTableElm();
 			const tableExists = !!tableElm;
@@ -38,6 +49,10 @@ describe(`Severe Weather`, () => {
 			handleFailure(`Could not find the table rows on the page`, ex);
 		}
 	});
+
+	// it(`Should load font awesome so status icons will be displayed`, async () => {
+
+	// });
 
 	before(() => {
 		automater = SevereWeatherAutomater(automaterOptions);
