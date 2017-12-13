@@ -3,11 +3,9 @@ const isDateEqual = require('date-fns/is_equal');
 const startOfDay = require('date-fns/start_of_day');
 const webdriver = require('selenium-webdriver');
 const statuses = require('./constants').statuses;
-
 const seleniumProxy = require('../../selenium-proxy');
-
 const By = webdriver.By;
-
+const firstCollapsedButtonIndex = 0;
 
 const helpers = (state) => {
 	/**
@@ -26,7 +24,7 @@ const helpers = (state) => {
 	const checkNavPanelStatus = async (initialStatus, targetButtonToClickSelector) => {
 		const collapsedButtons = await state.driver.findElements(By.css(targetButtonToClickSelector));
 		if (collapsedButtons && collapsedButtons.length) {
-			const collapsedButton = collapsedButtons[0];
+			const collapsedButton = collapsedButtons[firstCollapsedButtonIndex];
 			const collapsedButtonParent = await collapsedButton.findElement(By.xpath("..")); //https://stackoverflow.com/a/18001659/1143670
 			const isNavPanelOpen = await isPanelOpen(collapsedButtonParent);
 			const isExpandedAndOpen = initialStatus === statuses.EXPANDED && isNavPanelOpen;
@@ -64,12 +62,10 @@ const helpers = (state) => {
 		return await checkNavPanelStatus(statuses.COLLAPSED, state.options.expandButtonSelector);
 	};
 
-	
-
 	const doesNavShowRightCaretWhenCollapsed = async () => {
 		const expandButton = await state.driver.findElements(By.css(state.options.expandButtonSelector));
 		if (expandButton && expandButton.length) {
-			const expandButtonClasses = await expandButton[0].getAttribute('class');
+			const expandButtonClasses = await expandButton[firstCollapsedButtonIndex].getAttribute('class');
 			return expandButtonClasses.toLowerCase().indexOf("active") === -1;
 		}
 		return false;
@@ -78,7 +74,7 @@ const helpers = (state) => {
 	const doesNavShowDownCaretWhenExpanded = async () => {
 		const expandButton = await state.driver.findElements(By.css(state.options.expandButtonSelector));
 		if (expandButton && expandButton.length) {
-			const expandButtonElm = expandButton[0];
+			const expandButtonElm = expandButton[firstCollapsedButtonIndex];
 			let expandButtonClasses = await expandButtonElm.getAttribute('class');
 			let isExpanded = expandButtonClasses.toLowerCase().indexOf("active") > -1;
 
