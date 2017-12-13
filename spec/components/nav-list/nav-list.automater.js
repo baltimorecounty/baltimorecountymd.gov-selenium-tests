@@ -86,6 +86,7 @@ const helpers = (state) => {
 			let isExpanded = expandButtonClasses.toLowerCase().indexOf("active") > -1;
 
 			if (!isExpanded) {
+				await expandButtonElm.click();
 				expandButtonClasses = await expandButtonElm.getAttribute('class');
 				isExpanded = expandButtonClasses.toLowerCase().indexOf("active") > -1;
 				return isExpanded;
