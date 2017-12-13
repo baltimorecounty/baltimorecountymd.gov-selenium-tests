@@ -2,15 +2,12 @@ const dateParse = require('date-fns/parse');
 const isDateEqual = require('date-fns/is_equal');
 const startOfDay = require('date-fns/start_of_day');
 const webdriver = require('selenium-webdriver');
+const statuses = require('./constants').statuses;
 
 const seleniumProxy = require('../../selenium-proxy');
 
 const By = webdriver.By;
 
-const statuses = {
-	EXPANDED: 'expanded',
-	COLLAPSED: 'collapsed'
-};
 
 const helpers = (state) => {
 	/**
