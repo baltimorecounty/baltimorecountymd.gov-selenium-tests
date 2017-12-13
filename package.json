@@ -45,6 +45,7 @@
     "gulp-jasmine": "^2.4.2",
     "gulp-webdriver": "^2.0.3",
     "jasmine-spec-reporter": "^3.2.0",
-    "mocha": "^3.5.3"
+    "mocha": "^3.5.3",
+    "puppeteer": "^0.13.0"
   }
 }
